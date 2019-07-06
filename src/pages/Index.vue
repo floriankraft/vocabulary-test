@@ -1,6 +1,6 @@
 <template>
   <q-page class="flex flex-center">
-    <img alt="Quasar logo" src="~assets/quasar-logo-full.svg">
+    <tasklist></tasklist>
   </q-page>
 </template>
 
@@ -8,7 +8,12 @@
 </style>
 
 <script>
+import tasklist from '../components/tasklist'
+
 export default {
-  name: 'PageIndex'
+  name: 'PageIndex',
+  components: {
+    tasklist
+  }
 }
 </script>
