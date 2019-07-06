@@ -146,6 +146,8 @@ module.exports = function (ctx) {
       },
 
       packager: {
+        all: true
+
         // https://github.com/electron-userland/electron-packager/blob/master/docs/api.md#options
 
         // OS X / Mac App Store
@@ -156,12 +158,6 @@ module.exports = function (ctx) {
 
         // Windows only
         // win32metadata: { ... }
-      },
-
-      builder: {
-        // https://www.electron.build/configuration/configuration
-
-        // appId: 'vocabulary-test'
       }
     }
   }
