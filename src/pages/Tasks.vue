@@ -3,7 +3,8 @@
     <q-circular-progress
       center-color="blue-grey-3"
       color="primary"
-      show-value size="96px"
+      show-value
+      size="96px"
       :thickness="0.3"
       :value="timeRemainingPercent"
     />
