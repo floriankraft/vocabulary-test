@@ -33,17 +33,11 @@ module.exports = function (ctx) {
       components: [
         'QLayout',
         'QHeader',
-        'QDrawer',
         'QPageContainer',
         'QPage',
         'QToolbar',
         'QToolbarTitle',
         'QBtn',
-        'QIcon',
-        'QList',
-        'QItem',
-        'QItemSection',
-        'QItemLabel',
         'QCircularProgress'
       ],
 
