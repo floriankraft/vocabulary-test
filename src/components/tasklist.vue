@@ -8,16 +8,12 @@
 
 <script>
 export default {
-  data () {
-    return {
-      words: []
+  computed: {
+    words: {
+      get () {
+        return this.$store.state.vocabulary.vocabularyList
+      }
     }
-  },
-  beforeMount () {
-    console.log('test')
-    this.$q.electron.ipcRenderer.on('vocabularyFileLoaded', (event, wordsFromVocabularyFile) => {
-      this.words = wordsFromVocabularyFile
-    })
   }
 }
 </script>
