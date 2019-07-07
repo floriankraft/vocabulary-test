@@ -1,7 +1,7 @@
 <template>
   <q-page class="flex flex-center">
     <q-btn
-      @click="$router.push('/tasks')"
+      @click="$router.push('/waiting')"
       color="primary"
       label="Los!"
     />
@@ -13,13 +13,6 @@
 
 <script>
 export default {
-  name: 'PageIndex',
-  beforeMount () {
-    console.log('before mount Index.vue')
-    this.$q.electron.ipcRenderer.on('vocabularyFileLoaded', (event, wordsFromVocabularyFile) => {
-      console.log('vocabularyFileLoaded')
-      this.$store.commit('vocabulary/updateVocabulary', wordsFromVocabularyFile)
-    })
-  }
+  name: 'PageIndex'
 }
 </script>

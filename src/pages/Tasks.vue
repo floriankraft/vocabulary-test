@@ -1,13 +1,5 @@
 <template>
-  <q-page padding>
-    <q-circular-progress
-      center-color="blue-grey-3"
-      color="primary"
-      show-value
-      size="96px"
-      :thickness="0.3"
-      :value="timeRemainingPercent"
-    />
+  <q-page class="flex flex-center">
     <tasklist />
   </q-page>
 </template>
@@ -17,11 +9,6 @@ import tasklist from '../components/tasklist'
 
 export default {
   // name: 'PageName',
-  data () {
-    return {
-      timeRemainingPercent: 77
-    }
-  },
   components: {
     tasklist
   }
