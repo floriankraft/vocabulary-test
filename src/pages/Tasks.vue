@@ -1,16 +1,16 @@
 <template>
   <q-page class="flex flex-center">
-    <tasklist />
+    <tasks />
   </q-page>
 </template>
 
 <script>
-import tasklist from '../components/tasklist'
+import tasks from '../components/tasks'
 
 export default {
   // name: 'PageName',
   components: {
-    tasklist
+    tasks
   }
 }
 </script>

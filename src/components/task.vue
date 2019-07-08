@@ -1,15 +1,13 @@
 <template>
-  <ul class="tasklist">
-    <li class="taskbox--hidden" v-for="word in words" :key="word">
-      Wort: <span class="taskbox__word">{{ word }}</span>
-    </li>
-  </ul>
+  <div>{{ word }}</div>
 </template>
 
 <script>
 export default {
+  // name: 'ComponentName',
+  props: ['word'],
   computed: {
-    words: {
+    vocabularyList: {
       get () {
         return this.$store.state.vocabulary.vocabularyList
       }
