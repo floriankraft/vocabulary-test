@@ -1,15 +1,7 @@
 <template>
-  <div>
+  <div class="fullscreen">
     <task :word="vocabularyList[0]" />
-    <q-circular-progress
-      center-color="blue-grey-3"
-      color="primary"
-      reverse
-      show-value
-      size="96px"
-      :thickness="0.3"
-      :value="timeRemainingPercent"
-    >{{ timeRemainingSeconds }}</q-circular-progress>
+    <q-linear-progress :value="0.28" class="fixed-bottom" />
   </div>
 </template>
 
@@ -19,18 +11,11 @@ import task from '../components/task';
 export default {
   data() {
     return {
-      totalTimePercent: 100,
-      totalTimeSeconds: 10,
-      timeRemainingPercent: 100,
-      timeRemainingSeconds: 10
+      vocabularyList: []
     };
   },
-  computed: {
-    vocabularyList: {
-      get() {
-        return this.$store.state.vocabulary.vocabularyList;
-      }
-    }
+  mounted() {
+    this.vocabularyList = this.$store.state.vocabulary.vocabularyList;
   },
   components: {
     task

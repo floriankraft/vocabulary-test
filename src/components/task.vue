@@ -1,10 +1,9 @@
 <template>
-  <div>{{ word }}</div>
+  <div class="fixed-center text-h1">{{ word }}</div>
 </template>
 
 <script>
 export default {
-  // name: 'ComponentName',
   props: ['word'],
   computed: {
     vocabularyList: {

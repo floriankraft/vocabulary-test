@@ -40,7 +40,8 @@ module.exports = function (ctx) {
         'QToolbar',
         'QToolbarTitle',
         'QBtn',
-        'QCircularProgress'
+        'QCircularProgress',
+        'QLinearProgress'
       ],
 
       directives: [
