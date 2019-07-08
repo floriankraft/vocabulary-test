@@ -1,7 +1,15 @@
 <template>
   <div class="fullscreen">
-    <task :word="currentWord" />
-    <q-linear-progress class="fixed-bottom" style="height: 10px" :value="remainingTimeRelative" />
+    <task
+      :readingEnabled="modeReading"
+      :writingEnabled="modeWriting"
+      :word="vocabularyList[currentWordIndex]"
+    />
+    <q-linear-progress
+      class="fixed-bottom"
+      style="height: 10px"
+      :value="lengthProgressBar"
+    />
   </div>
 </template>
 
@@ -12,25 +20,55 @@ export default {
   data() {
     return {
       vocabularyList: [],
-      currentWord: '',
-      totalTimeRelative: 1,
-      totalTimeSeconds: 10,
-      remainingTimeRelative: 1,
-      remainingTimeSeconds: 10
+      currentWordIndex: 0,
+      modeReading: true,
+      modeWriting: false,
+      lengthProgressBar: 1,
+      timer: null
     };
   },
+  methods: {
+    resetCountdown() {
+      clearInterval(this.timer);
+      this.lengthProgressBar = 1;
+    },
+    showCountdown(totalSeconds, callback) {
+      let remainingSeconds = totalSeconds;
+      this.timer = setInterval(() => {
+        remainingSeconds--;
+        this.lengthProgressBar = (remainingSeconds / totalSeconds);
+        if (remainingSeconds === 0) {
+          this.resetCountdown();
+          callback();
+        }
+      }, 1000);
+    },
+    startEvaluationPhase() {
+      console.log('evaluation phase');
+    },
+    startWritingPhase() {
+      this.modeWriting = true;
+      this.showCountdown(3, this.startEvaluationPhase);
+    },
+    startWaitingPhase() {
+      this.modeReading = false;
+      this.showCountdown(3, this.startWritingPhase);
+    },
+    startReadingPhase() {
+      this.showCountdown(3, this.startWaitingPhase);
+    },
+    startNewWordTask() {
+      this.startReadingPhase();
+    }
+  },
   mounted() {
+    this.$root.$on('timer-stop', () => {
+      this.resetCountdown();
+      this.startEvaluationPhase();
+    });
+
     this.vocabularyList = this.$store.state.vocabulary.vocabularyList;
-    this.currentWord = this.vocabularyList[0];
-    const timer = setInterval(() => {
-      this.remainingTimeSeconds--;
-      this.remainingTimeRelative = (this.remainingTimeSeconds / this.totalTimeSeconds) * this.totalTimeRelative;
-      if (this.remainingTimeSeconds === 0) {
-        clearInterval(timer);
-        // TODO: Do something, so that user can input a word.
-        // Maybe put input component here as well and work with visibility attribute, which we are setting dynamically.
-      }
-    }, 1000);
+    this.startNewWordTask();
   },
   components: {
     task

@@ -33,15 +33,17 @@ module.exports = function (ctx) {
       // all: true, // --- includes everything; for dev only!
 
       components: [
-        'QLayout',
-        'QHeader',
-        'QPageContainer',
-        'QPage',
-        'QToolbar',
-        'QToolbarTitle',
         'QBtn',
         'QCircularProgress',
-        'QLinearProgress'
+        'QHeader',
+        'QInput',
+        'QLayout',
+        'QLinearProgress',
+        'QPage',
+        'QPageContainer',
+        'QSpinnerPie',
+        'QToolbar',
+        'QToolbarTitle'
       ],
 
       directives: [

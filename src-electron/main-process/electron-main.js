@@ -65,7 +65,6 @@ app.on('activate', () => {
 });
 
 const sendVocabularyToPage = (err, data) => {
-  console.log(data);
   const vocabularyArray = data.split(/\r?\n/);
   const filteredArray = vocabularyArray.filter(el => el !== null && el !== '');
   mainWindow.webContents.send('vocabularyFileLoaded', filteredArray);
@@ -73,7 +72,6 @@ const sendVocabularyToPage = (err, data) => {
 
 const readVocabularyFile = () => {
   const vocabularyFilePath = path.join('.', '/vocabulary.txt');
-  console.log(vocabularyFilePath);
   fs.readFile(vocabularyFilePath, 'utf8', sendVocabularyToPage);
 };
 
