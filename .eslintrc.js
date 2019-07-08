@@ -51,6 +51,11 @@ module.exports = {
 
     'comma-dangle': ['error', 'never'],
     'max-len': ['error', { 'code': 120 }],
-    'no-plusplus': ['off']
+    'no-plusplus': ['off'],
+    "prefer-destructuring": ["error", {
+      "VariableDeclarator": {
+        "array": false
+      }
+    }]
   }
 }
