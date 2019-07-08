@@ -1,16 +1,16 @@
-import { app, BrowserWindow } from 'electron'
-import fs from 'fs'
-import path from 'path'
+import { app, BrowserWindow } from 'electron';
+import fs from 'fs';
+import path from 'path';
 
 /**
  * Set `__statics` path to static files in production;
  * The reason we are setting it here is that the path needs to be evaluated at runtime
  */
 if (process.env.PROD) {
-  global.__statics = require('path').join(__dirname, 'statics').replace(/\\/g, '\\\\')
+  global.__statics = path.join(__dirname, 'statics').replace(/\\/g, '\\\\');
 }
 
-let mainWindow
+let mainWindow;
 
 const createWindow = async () => {
   /**
@@ -30,10 +30,10 @@ const createWindow = async () => {
   });
 
   win.on('closed', () => {
-    mainWindow = null
+    mainWindow = null;
   });
 
-  await win.loadURL(process.env.APP_URL)
+  await win.loadURL(process.env.APP_URL);
 
   return win;
 };
@@ -54,7 +54,7 @@ app.on('second-instance', () => {
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
-    app.quit()
+    app.quit();
   }
 });
 
@@ -67,9 +67,7 @@ app.on('activate', () => {
 const sendVocabularyToPage = (err, data) => {
   console.log(data);
   const vocabularyArray = data.split(/\r?\n/);
-  var filteredArray = vocabularyArray.filter(function (el) {
-    return el != null && el != '';
-  });
+  const filteredArray = vocabularyArray.filter(el => el !== null && el !== '');
   mainWindow.webContents.send('vocabularyFileLoaded', filteredArray);
 };
 

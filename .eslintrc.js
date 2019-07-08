@@ -52,9 +52,14 @@ module.exports = {
     'comma-dangle': ['error', 'never'],
     'max-len': ['error', { 'code': 120 }],
     'no-plusplus': ['off'],
-    "prefer-destructuring": ["error", {
-      "VariableDeclarator": {
-        "array": false
+    'no-underscore-dangle': ['error', {
+      'allow': [
+        '__statics'
+      ]
+    }],
+    'prefer-destructuring': ['error', {
+      'VariableDeclarator': {
+        'array': false
       }
     }]
   }
