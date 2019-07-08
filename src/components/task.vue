@@ -8,12 +8,12 @@ export default {
   props: ['word'],
   computed: {
     vocabularyList: {
-      get () {
-        return this.$store.state.vocabulary.vocabularyList
+      get() {
+        return this.$store.state.vocabulary.vocabularyList;
       }
     }
   }
-}
+};
 </script>
 
 <style>

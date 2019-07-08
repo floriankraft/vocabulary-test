@@ -5,14 +5,14 @@
 </template>
 
 <script>
-import tasks from '../components/tasks'
+import tasks from '../components/tasks';
 
 export default {
   // name: 'PageName',
   components: {
     tasks
   }
-}
+};
 </script>
 
 <style>

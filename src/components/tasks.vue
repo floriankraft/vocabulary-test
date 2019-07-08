@@ -14,28 +14,28 @@
 </template>
 
 <script>
-import task from '../components/task'
+import task from '../components/task';
 
 export default {
-  data () {
+  data() {
     return {
       totalTimePercent: 100,
       totalTimeSeconds: 10,
       timeRemainingPercent: 100,
       timeRemainingSeconds: 10
-    }
+    };
   },
   computed: {
     vocabularyList: {
-      get () {
-        return this.$store.state.vocabulary.vocabularyList
+      get() {
+        return this.$store.state.vocabulary.vocabularyList;
       }
     }
   },
   components: {
     task
   }
-}
+};
 </script>
 
 <style>
