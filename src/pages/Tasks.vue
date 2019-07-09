@@ -8,7 +8,6 @@
 import tasks from '../components/tasks';
 
 export default {
-  // name: 'PageName',
   components: {
     tasks
   }

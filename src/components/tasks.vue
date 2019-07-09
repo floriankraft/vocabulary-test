@@ -16,6 +16,8 @@
 <script>
 import task from '../components/task';
 
+const totalLengthProgressBar = 1;
+
 export default {
   data() {
     return {
@@ -23,24 +25,25 @@ export default {
       currentWordIndex: 0,
       modeReading: true,
       modeWriting: false,
-      lengthProgressBar: 1,
+      lengthProgressBar: totalLengthProgressBar,
       timer: null
     };
   },
   methods: {
     resetCountdown() {
       clearInterval(this.timer);
-      this.lengthProgressBar = 1;
+      this.lengthProgressBar = totalLengthProgressBar;
     },
     showCountdown(totalSeconds, callback) {
       let remainingSeconds = totalSeconds;
       this.timer = setInterval(() => {
-        remainingSeconds--;
-        this.lengthProgressBar = (remainingSeconds / totalSeconds);
         if (remainingSeconds === 0) {
           this.resetCountdown();
           callback();
+          return;
         }
+        remainingSeconds--;
+        this.lengthProgressBar = (remainingSeconds / totalSeconds);
       }, 1000);
     },
     startEvaluationPhase() {
@@ -48,7 +51,7 @@ export default {
     },
     startWritingPhase() {
       this.modeWriting = true;
-      this.showCountdown(3, this.startEvaluationPhase);
+      this.showCountdown(10, this.startEvaluationPhase);
     },
     startWaitingPhase() {
       this.modeReading = false;

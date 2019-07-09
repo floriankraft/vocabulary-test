@@ -13,24 +13,26 @@
 </template>
 
 <script>
+const totalTimePercent = 100;
+const totalTimeSeconds = 3;
+
 export default {
   // name: 'PageName',
   data() {
     return {
-      totalTimePercent: 100,
-      totalTimeSeconds: 3,
-      timeRemainingPercent: 100,
-      timeRemainingSeconds: 3
+      timeRemainingPercent: totalTimePercent,
+      timeRemainingSeconds: totalTimeSeconds
     };
   },
   mounted() {
     const timer = setInterval(() => {
-      this.timeRemainingSeconds--;
-      this.timeRemainingPercent = (this.timeRemainingSeconds / this.totalTimeSeconds) * this.totalTimePercent;
       if (this.timeRemainingSeconds === 0) {
         clearInterval(timer);
         this.$router.push('/tasks');
+        return;
       }
+      this.timeRemainingSeconds--;
+      this.timeRemainingPercent = (this.timeRemainingSeconds / totalTimeSeconds) * totalTimePercent;
     }, 1000);
   }
 };
