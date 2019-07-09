@@ -1,4 +1,5 @@
 export default {
-  vocabularyTaskList: [],
-  vocabularyInputList: []
+  taskList: [],
+  inputList: [],
+  currentIndex: 0
 };

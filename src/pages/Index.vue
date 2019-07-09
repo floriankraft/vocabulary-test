@@ -1,7 +1,7 @@
 <template>
   <q-page class="flex flex-center">
     <q-btn
-      @click="$router.push('/waiting')"
+      @click="$router.push('/wait')"
       color="primary"
       label="Los!"
     />

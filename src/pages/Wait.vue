@@ -14,10 +14,9 @@
 
 <script>
 const totalTimePercent = 100;
-const totalTimeSeconds = 3;
+const totalTimeSeconds = 1;
 
 export default {
-  // name: 'PageName',
   data() {
     return {
       timeRemainingPercent: totalTimePercent,
@@ -28,7 +27,7 @@ export default {
     const timer = setInterval(() => {
       if (this.timeRemainingSeconds === 0) {
         clearInterval(timer);
-        this.$router.push('/tasks');
+        this.$router.push('/read');
         return;
       }
       this.timeRemainingSeconds--;

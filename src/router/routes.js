@@ -4,8 +4,11 @@ const routes = [
     component: () => import('layouts/MyLayout.vue'),
     children: [
       { path: '', component: () => import('pages/Index.vue') },
-      { path: 'tasks', component: () => import('pages/Tasks.vue') },
-      { path: 'waiting', component: () => import('pages/Waiting.vue') }
+      { path: 'wait', component: () => import('pages/Wait.vue') },
+      { path: 'read', component: () => import('pages/Read.vue') },
+      { path: 'memorize', component: () => import('pages/Memorize.vue') },
+      { path: 'write', component: () => import('pages/Write.vue') },
+      { path: 'evaluate', component: () => import('pages/Evaluate.vue') }
     ]
   }
 ];
