@@ -1,3 +1,4 @@
 export default {
-  vocabularyList: []
+  vocabularyTaskList: [],
+  vocabularyInputList: []
 };

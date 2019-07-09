@@ -3,7 +3,7 @@
     <task
       :readingEnabled="modeReading"
       :writingEnabled="modeWriting"
-      :word="vocabularyList[currentWordIndex]"
+      :word="vocabularyTaskList[currentWordIndex]"
     />
     <q-linear-progress
       class="fixed-bottom"
@@ -21,20 +21,25 @@ const totalLengthProgressBar = 1;
 export default {
   data() {
     return {
-      vocabularyList: [],
+      vocabularyTaskList: [],
       currentWordIndex: 0,
       modeReading: true,
       modeWriting: false,
       lengthProgressBar: totalLengthProgressBar,
-      timer: null
+      timer: null,
+      isTimerReset: false
     };
   },
   methods: {
     resetCountdown() {
-      clearInterval(this.timer);
-      this.lengthProgressBar = totalLengthProgressBar;
+      if (!this.isTimerReset) {
+        this.isTimerReset = true;
+        clearInterval(this.timer);
+        this.lengthProgressBar = totalLengthProgressBar;
+      }
     },
     showCountdown(totalSeconds, callback) {
+      this.isTimerReset = false;
       let remainingSeconds = totalSeconds;
       this.timer = setInterval(() => {
         if (remainingSeconds === 0) {
@@ -50,6 +55,12 @@ export default {
       console.log('evaluation phase');
     },
     startWritingPhase() {
+      // Invoked, when the user presses Enter in the input field. See: src/components/task.vue
+      this.$root.$on('task-input-submit', () => {
+        this.resetCountdown();
+        this.startEvaluationPhase();
+      });
+
       this.modeWriting = true;
       this.showCountdown(10, this.startEvaluationPhase);
     },
@@ -65,12 +76,7 @@ export default {
     }
   },
   mounted() {
-    this.$root.$on('timer-stop', () => {
-      this.resetCountdown();
-      this.startEvaluationPhase();
-    });
-
-    this.vocabularyList = this.$store.state.vocabulary.vocabularyList;
+    this.vocabularyTaskList = this.$store.state.vocabulary.vocabularyTaskList;
     this.startNewWordTask();
   },
   components: {

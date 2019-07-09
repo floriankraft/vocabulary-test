@@ -17,7 +17,8 @@
       outlined
       rounded
       v-bind:class="writingEnabled ? '' : 'hidden'"
-      v-on:keyup.enter="submitInput"
+      v-on:input="inputChange"
+      v-on:keyup.enter="inputSubmit"
     />
   </div>
 </template>
@@ -26,9 +27,11 @@
 export default {
   props: ['readingEnabled', 'writingEnabled', 'word'],
   methods: {
-    submitInput() {
-      console.log('submit input');
-      this.$root.$emit('timer-stop');
+    inputChange(value) {
+      this.$store.commit('vocabulary/addVocabularyInput', value);
+    },
+    inputSubmit() {
+      this.$root.$emit('task-input-submit');
     }
   }
 };

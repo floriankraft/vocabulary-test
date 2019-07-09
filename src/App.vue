@@ -9,7 +9,7 @@ export default {
   name: 'App',
   beforeMount() {
     this.$q.electron.ipcRenderer.on('vocabularyFileLoaded', (event, wordsFromVocabularyFile) => {
-      this.$store.commit('vocabulary/updateVocabulary', wordsFromVocabularyFile);
+      this.$store.commit('vocabulary/createVocabularyTaskList', wordsFromVocabularyFile);
     });
   }
 };
