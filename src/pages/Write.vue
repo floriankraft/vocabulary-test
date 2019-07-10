@@ -31,7 +31,6 @@ export default {
   },
   mounted() {
     this.$root.$on('task-progress-bar:finish', () => {
-      console.log('progress bar finished');
       this.$router.push('/evaluate');
     });
 

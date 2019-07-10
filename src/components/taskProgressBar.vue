@@ -39,6 +39,9 @@ export default {
       clearInterval(this.timer);
       this.lengthProgressBar = totalLengthProgressBar;
     }
+  },
+  beforeDestroy() {
+    this.resetCountdown();
   }
 };
 </script>
