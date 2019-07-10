@@ -43,7 +43,8 @@ module.exports = function (ctx) {
         'QPageContainer',
         'QSpinnerPie',
         'QToolbar',
-        'QToolbarTitle'
+        'QToolbarTitle',
+        'QIcon'
       ],
 
       directives: [

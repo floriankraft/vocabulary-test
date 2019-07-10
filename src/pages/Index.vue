@@ -3,7 +3,7 @@
     <q-btn
       @click="$router.push('/wait')"
       color="primary"
-      label="Los!"
+      label="Los gehts!"
     />
   </q-page>
 </template>
