@@ -36,15 +36,16 @@ module.exports = function (ctx) {
         'QBtn',
         'QCircularProgress',
         'QHeader',
+        'QIcon',
         'QInput',
         'QLayout',
         'QLinearProgress',
         'QPage',
         'QPageContainer',
+        'QRating',
         'QSpinnerPie',
         'QToolbar',
-        'QToolbarTitle',
-        'QIcon'
+        'QToolbarTitle'
       ],
 
       directives: [

@@ -8,7 +8,8 @@ const routes = [
       { path: 'read', component: () => import('pages/Read.vue') },
       { path: 'memorize', component: () => import('pages/Memorize.vue') },
       { path: 'write', component: () => import('pages/Write.vue') },
-      { path: 'evaluate', component: () => import('pages/Evaluate.vue') }
+      { path: 'evaluate', component: () => import('pages/Evaluate.vue') },
+      { path: 'statistics', component: () => import('pages/Statistics.vue') }
     ]
   }
 ];

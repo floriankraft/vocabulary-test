@@ -17,9 +17,9 @@
       </div>
     </div>
     <q-btn
-      @click="$router.push('/wait')"
+      @click="buttonClick"
       color="primary"
-      label="Weiter gehts!"
+      :label="isLastWord ? 'Fertig!' : 'Weiter gehts!'"
     />
   </q-page>
 </template>
@@ -29,7 +29,8 @@ export default {
   data() {
     return {
       vocabularyCurrentTask: '',
-      vocabularyCurrentInput: ''
+      vocabularyCurrentInput: '',
+      isLastWord: false
     };
   },
   computed: {
@@ -40,7 +41,24 @@ export default {
   mounted() {
     this.vocabularyCurrentTask = this.$store.state.vocabulary.taskList[this.$store.state.vocabulary.currentIndex];
     this.vocabularyCurrentInput = this.$store.state.vocabulary.inputList[this.$store.state.vocabulary.currentIndex];
-    this.$store.commit('vocabulary/increaseCurrentIndex');
+    this.isLastWord = this.$store.state.vocabulary.taskList.length === this.$store.state.vocabulary.currentIndex + 1;
+    if (this.isLastWord) {
+      this.saveStatistics();
+    } else {
+      this.$store.commit('vocabulary/increaseCurrentIndex');
+    }
+  },
+  methods: {
+    saveStatistics() {
+      console.log('saving');
+    },
+    buttonClick() {
+      if (this.isLastWord) {
+        this.$router.push('/statistics');
+      } else {
+        this.$router.push('/wait');
+      }
+    }
   }
 };
 </script>
