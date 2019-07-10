@@ -1,5 +1,6 @@
 export default {
   taskList: [],
   inputList: [],
-  currentIndex: 0
+  currentIndex: 0,
+  correctWordCount: 0
 };

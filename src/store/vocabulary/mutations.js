@@ -20,3 +20,7 @@ export const setVocabularyInputListItem = (state, payload) => {
 export const increaseCurrentIndex = (state) => {
   state.currentIndex++;
 };
+
+export const increaseCorrectWordCount = (state) => {
+  state.correctWordCount++;
+};

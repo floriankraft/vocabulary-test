@@ -1,6 +1,9 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, ipcMain } from 'electron';
 import fs from 'fs';
 import path from 'path';
+
+const vocabularyFilePath = path.join('.', '/vocabulary.txt');
+const statisticsFilePath = path.join('.', '/statistics.json');
 
 /**
  * Set `__statics` path to static files in production;
@@ -71,9 +74,40 @@ const sendVocabularyToPage = (err, data) => {
 };
 
 const readVocabularyFile = () => {
-  const vocabularyFilePath = path.join('.', '/vocabulary.txt');
   fs.readFile(vocabularyFilePath, 'utf8', sendVocabularyToPage);
 };
+
+const writeStatisticsFile = (statistics, newStatisticsItem, callback) => {
+  statistics.runs.push(newStatisticsItem);
+  fs.writeFile(statisticsFilePath, JSON.stringify(statistics), 'utf8', () => {
+    callback();
+  });
+};
+
+const readStatisticsFile = (callback) => {
+  fs.exists(statisticsFilePath, (exists) => {
+    if (exists) {
+      fs.readFile(statisticsFilePath, (err, statisticsFileContent) => {
+        if (!err) {
+          callback(JSON.parse(statisticsFileContent));
+        }
+      });
+    } else {
+      const emptyStatistics = {
+        runs: []
+      };
+      callback(emptyStatistics);
+    }
+  });
+};
+
+ipcMain.on('statisticsPrepared', (event, newStatisticsItem) => {
+  readStatisticsFile((statistics) => {
+    writeStatisticsFile(statistics, newStatisticsItem, () => {
+      event.reply('statisticsSaved', statistics);
+    });
+  });
+});
 
 (async () => {
   await app.whenReady();

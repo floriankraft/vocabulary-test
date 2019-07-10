@@ -42,6 +42,11 @@ export default {
     this.vocabularyCurrentTask = this.$store.state.vocabulary.taskList[this.$store.state.vocabulary.currentIndex];
     this.vocabularyCurrentInput = this.$store.state.vocabulary.inputList[this.$store.state.vocabulary.currentIndex];
     this.isLastWord = this.$store.state.vocabulary.taskList.length === this.$store.state.vocabulary.currentIndex + 1;
+
+    if (this.isCorrect) {
+      this.$store.commit('vocabulary/increaseCorrectWordCount');
+    }
+
     if (this.isLastWord) {
       this.saveStatistics();
     } else {
@@ -50,7 +55,20 @@ export default {
   },
   methods: {
     saveStatistics() {
-      console.log('saving');
+      // Listen for response from main process - statistics file has been written
+      this.$q.electron.ipcRenderer.on('statisticsSaved', (event, arg) => {
+        // Enable button for going to statistics
+        console.log(arg);
+      });
+
+      // Send message to main process containing the statistics of the current run
+      this.$q.electron.ipcRenderer.send('statisticsPrepared', {
+        timestamp: Date.now(),
+        taskList: this.$store.state.vocabulary.taskList,
+        inputList: this.$store.state.vocabulary.inputList,
+        maxRating: this.$store.state.vocabulary.taskList.length,
+        actualRating: this.$store.state.vocabulary.correctWordCount
+      });
     },
     buttonClick() {
       if (this.isLastWord) {
