@@ -2,11 +2,11 @@
 export function someMutation (state) {
 }
 */
-export const createTaskList = (state, words) => {
+export const setTaskList = (state, words) => {
   state.taskList = words;
 };
 
-export const setVocabularyInputListItem = (state, payload) => {
+export const setInputListItem = (state, payload) => {
   const index = payload.index;
   const word = payload.word;
   if (index >= 0) {
@@ -23,4 +23,8 @@ export const increaseCurrentIndex = (state) => {
 
 export const increaseCorrectWordCount = (state) => {
   state.correctWordCount++;
+};
+
+export const setStatistics = (state, statistics) => {
+  state.statistics = statistics;
 };

@@ -63,7 +63,7 @@ export default {
     saveStatistics(callback) {
       // Listen for response from main process - statistics file has been written
       this.$q.electron.ipcRenderer.on('statisticsSaved', (event, fullStatistics) => {
-        console.log(fullStatistics); // TODO: Add this to global store and provide statistics timeline.
+        this.$store.commit('vocabulary/setStatistics', fullStatistics);
         callback();
       });
 

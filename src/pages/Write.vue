@@ -23,7 +23,7 @@ export default {
   },
   methods: {
     inputChange(value) {
-      this.$store.commit('vocabulary/setVocabularyInputListItem', { index: this.vocabularyCurrentIndex, word: value });
+      this.$store.commit('vocabulary/setInputListItem', { index: this.vocabularyCurrentIndex, word: value });
     },
     inputSubmit() {
       this.$router.push('/evaluate');

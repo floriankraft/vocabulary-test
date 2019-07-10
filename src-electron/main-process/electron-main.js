@@ -73,12 +73,16 @@ const sendVocabularyToPage = (err, data) => {
   mainWindow.webContents.send('vocabularyFileLoaded', filteredArray);
 };
 
-const readVocabularyFile = () => {
-  fs.readFile(vocabularyFilePath, 'utf8', sendVocabularyToPage);
+const readVocabularyFile = (callback) => {
+  fs.readFile(vocabularyFilePath, 'utf8', callback);
+};
+
+const sendStatisticsToPage = (data) => {
+  mainWindow.webContents.send('statisticsFileLoaded', data);
 };
 
 const writeStatisticsFile = (statistics, newStatisticsItem, callback) => {
-  statistics.runs.push(newStatisticsItem);
+  statistics.runs.unshift(newStatisticsItem);
   fs.writeFile(statisticsFilePath, JSON.stringify(statistics), 'utf8', () => {
     callback();
   });
@@ -112,5 +116,6 @@ ipcMain.on('statisticsPrepared', (event, newStatisticsItem) => {
 (async () => {
   await app.whenReady();
   mainWindow = await createWindow();
-  readVocabularyFile();
+  readVocabularyFile(sendVocabularyToPage);
+  readStatisticsFile(sendStatisticsToPage);
 })();

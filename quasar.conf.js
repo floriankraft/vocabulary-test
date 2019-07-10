@@ -44,6 +44,8 @@ module.exports = function (ctx) {
         'QPageContainer',
         'QRating',
         'QSpinnerPie',
+        'QTimeline',
+        'QTimelineEntry',
         'QToolbar',
         'QToolbarTitle'
       ],
