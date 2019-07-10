@@ -19,6 +19,7 @@
     <q-btn
       @click="buttonClick"
       color="primary"
+      disable="isButtonDisabled"
       :label="isLastWord ? 'Fertig!' : 'Weiter gehts!'"
     />
   </q-page>
@@ -30,7 +31,8 @@ export default {
     return {
       vocabularyCurrentTask: '',
       vocabularyCurrentInput: '',
-      isLastWord: false
+      isLastWord: false,
+      isButtonDisabled: true
     };
   },
   computed: {
@@ -48,17 +50,21 @@ export default {
     }
 
     if (this.isLastWord) {
-      this.saveStatistics();
+      this.saveStatistics(this.enableButton);
     } else {
-      this.$store.commit('vocabulary/increaseCurrentIndex');
+      this.increaseCurrentIndex(this.enableButton);
     }
   },
   methods: {
-    saveStatistics() {
+    increaseCurrentIndex(callback) {
+      this.$store.commit('vocabulary/increaseCurrentIndex');
+      callback();
+    },
+    saveStatistics(callback) {
       // Listen for response from main process - statistics file has been written
-      this.$q.electron.ipcRenderer.on('statisticsSaved', (event, arg) => {
-        // Enable button for going to statistics
-        console.log(arg);
+      this.$q.electron.ipcRenderer.on('statisticsSaved', (event, fullStatistics) => {
+        console.log(fullStatistics); // TODO: Add this to global store and provide statistics timeline.
+        callback();
       });
 
       // Send message to main process containing the statistics of the current run
@@ -69,6 +75,9 @@ export default {
         maxRating: this.$store.state.vocabulary.taskList.length,
         actualRating: this.$store.state.vocabulary.correctWordCount
       });
+    },
+    enableButton() {
+      this.isButtonDisabled = false;
     },
     buttonClick() {
       if (this.isLastWord) {
