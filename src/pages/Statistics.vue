@@ -1,11 +1,12 @@
 <template>
   <q-page class="flex flex-center">
-    <q-timeline color="primary" layout="comfortable">
-      <q-timeline-entry
-        v-for="(entry, index) in statisticEntries"
-        :key="index"
-        :subtitle="formatTimestamp(entry.timestamp)"
-      >
+    <q-scroll-area class="fullscreen statistics__scrollarea">
+      <q-timeline class="statistics__timeline" color="primary" layout="comfortable">
+        <q-timeline-entry
+          v-for="(entry, index) in statisticEntries"
+          :key="index"
+          :subtitle="formatTimestamp(entry.timestamp)"
+        >
         <q-rating
           color="amber"
           :max="entry.maxRating"
@@ -15,6 +16,7 @@
         />
       </q-timeline-entry>
     </q-timeline>
+    </q-scroll-area>
   </q-page>
 </template>
 
@@ -46,6 +48,14 @@ export default {
 </script>
 
 <style>
+.statistics__scrollarea {
+  margin: 50px 0 0;
+}
+
+.statistics__timeline {
+  padding: 0 50px;
+}
+
 .q-timeline--comfortable .q-timeline__subtitle {
   padding-top: 7px;
 }
