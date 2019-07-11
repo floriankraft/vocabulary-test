@@ -3,7 +3,7 @@
     <div class="text-h1">
       {{ vocabularyTaskList[vocabularyCurrentIndex] }}
     </div>
-    <task-progress-bar :totalSeconds="1" />
+    <task-progress-bar :totalSeconds="5" />
   </q-page>
 </template>
 

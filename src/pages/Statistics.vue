@@ -7,15 +7,15 @@
           :key="index"
           :subtitle="formatTimestamp(entry.timestamp)"
         >
-        <q-rating
-          color="amber"
-          :max="entry.maxRating"
-          readonly
-          size="32px"
-          :value="entry.actualRating"
-        />
-      </q-timeline-entry>
-    </q-timeline>
+          <q-rating
+            color="amber"
+            :max="entry.maxRating"
+            readonly
+            size="32px"
+            :value="entry.actualRating"
+          />
+        </q-timeline-entry>
+      </q-timeline>
     </q-scroll-area>
   </q-page>
 </template>

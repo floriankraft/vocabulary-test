@@ -8,7 +8,7 @@
       v-on:input="inputChange"
       v-on:keyup.enter="inputSubmit"
     />
-    <task-progress-bar :totalSeconds="5" />
+    <task-progress-bar :totalSeconds="30" />
   </q-page>
 </template>
 

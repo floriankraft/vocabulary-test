@@ -14,7 +14,7 @@
 
 <script>
 const totalTimePercent = 100;
-const totalTimeSeconds = 1;
+const totalTimeSeconds = 3;
 
 export default {
   data() {

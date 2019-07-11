@@ -4,7 +4,7 @@
       color="primary"
       size="96px"
     />
-    <task-progress-bar :totalSeconds="1" />
+    <task-progress-bar :totalSeconds="10" />
   </q-page>
 </template>
 
