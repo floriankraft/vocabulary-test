@@ -33,6 +33,7 @@ module.exports = function (ctx) {
       // all: true, // --- includes everything; for dev only!
 
       components: [
+        'QBar',
         'QBtn',
         'QCircularProgress',
         'QHeader',
@@ -44,11 +45,10 @@ module.exports = function (ctx) {
         'QPageContainer',
         'QRating',
         'QScrollArea',
+        'QSpace',
         'QSpinnerPie',
         'QTimeline',
-        'QTimelineEntry',
-        'QToolbar',
-        'QToolbarTitle'
+        'QTimelineEntry'
       ],
 
       directives: [

@@ -20,12 +20,13 @@ const createWindow = async () => {
    * Initial window options
    */
   const win = new BrowserWindow({
-    width: 1000,
+    frame: false,
     height: 600,
     useContentSize: true,
     webPreferences: {
       nodeIntegration: true
-    }
+    },
+    width: 1000
   });
 
   win.on('ready-to-show', () => {
