@@ -4,16 +4,24 @@
  *  modify this file, but it can be used to extend your development
  *  environment.
  */
+import { app } from 'electron';
+import path from 'path';
+import electronDebug from 'electron-debug';
+import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer';
+import { productName } from '../../package.json';
 
-// Install `electron-debug` with `devtron`
-require('electron-debug')({ showDevTools: true });
+// Set user data path explicitly in DEV mode. Otherwise it would always be 'Electron'.
+const originalUserData = app.getPath('userData');
+app.setPath('userData', path.join(originalUserData, productName));
+
+// Show dev-tools
+electronDebug({ showDevTools: true, devToolsMode: 'undocked' });
 
 // Install `vue-devtools`
-require('electron').app.on('ready', () => {
-  const installExtension = require('electron-devtools-installer');
-  installExtension.default(installExtension.VUEJS_DEVTOOLS)
+app.on('ready', () => {
+  installExtension(VUEJS_DEVTOOLS)
     .then(() => {})
-    .catch(err => {
+    .catch((err) => {
       console.log('Unable to install `vue-devtools`: \n', err);
     });
 });
