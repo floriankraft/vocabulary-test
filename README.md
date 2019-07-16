@@ -1,5 +1,10 @@
 # Readme
 
+# Build & Run
+
+* `npm install`
+*
+
 ## TODOs
 
 * Store files in userData path (`app.getPath('userData')`)
