@@ -1,9 +1,9 @@
 # Readme
 
-# Build & Run
+## Build & Run
 
 * `npm install`
-*
+* `npm start`
 
 ## TODOs
 
