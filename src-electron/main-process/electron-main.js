@@ -2,8 +2,9 @@ import { app, BrowserWindow, ipcMain } from 'electron';
 import fs from 'fs';
 import path from 'path';
 
-const vocabularyFilePath = path.join('.', '/vocabulary.txt');
-const statisticsFilePath = path.join('.', '/statistics.json');
+const userDataPath = app.getPath('userData');
+const vocabularyFilePath = path.join(userDataPath, '/vocabulary.txt');
+const statisticsFilePath = path.join(userDataPath, '/statistics.json');
 
 /**
  * Set `__statics` path to static files in production;
@@ -71,11 +72,23 @@ app.on('activate', () => {
 const sendVocabularyToPage = (err, data) => {
   const vocabularyArray = data.split(/\r?\n/);
   const filteredArray = vocabularyArray.filter(el => el !== null && el !== '');
-  mainWindow.webContents.send('vocabularyFileLoaded', filteredArray);
+  const payload = {
+    filePath: vocabularyFilePath,
+    vocabulary: filteredArray
+  };
+  mainWindow.webContents.send('vocabularyFileLoaded', payload);
 };
 
 const readVocabularyFile = (callback) => {
-  fs.readFile(vocabularyFilePath, 'utf8', callback);
+  fs.exists(vocabularyFilePath, (exists) => {
+    if (exists) {
+      fs.readFile(vocabularyFilePath, 'utf8', callback);
+    } else {
+      fs.writeFile(vocabularyFilePath, '', 'utf8', () => {
+        callback(null, '');
+      });
+    }
+  });
 };
 
 const sendStatisticsToPage = (data) => {
@@ -92,7 +105,7 @@ const writeStatisticsFile = (statistics, newStatisticsItem, callback) => {
 const readStatisticsFile = (callback) => {
   fs.exists(statisticsFilePath, (exists) => {
     if (exists) {
-      fs.readFile(statisticsFilePath, (err, statisticsFileContent) => {
+      fs.readFile(statisticsFilePath, 'utf8', (err, statisticsFileContent) => {
         if (!err) {
           callback(JSON.parse(statisticsFileContent));
         }

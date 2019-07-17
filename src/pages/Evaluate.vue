@@ -78,6 +78,7 @@ export default {
     },
     enableButton() {
       this.isButtonDisabled = false;
+      // FIXME: we have a console error here
     },
     buttonClick() {
       if (this.isLastWord) {
