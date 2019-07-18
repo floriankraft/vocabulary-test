@@ -19,7 +19,7 @@
     <q-btn
       @click="buttonClick"
       color="primary"
-      disable="isButtonDisabled"
+      :disable="isButtonDisabled"
       :label="isLastWord ? 'Fertig!' : 'Weiter gehts!'"
     />
   </q-page>
@@ -78,7 +78,6 @@ export default {
     },
     enableButton() {
       this.isButtonDisabled = false;
-      // FIXME: we have a console error here
     },
     buttonClick() {
       if (this.isLastWord) {
