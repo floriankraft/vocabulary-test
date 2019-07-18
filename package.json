@@ -1,6 +1,6 @@
 {
   "name": "vocabulary-test",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Practice spelling of words with a list of self-defined vocabulary.",
   "productName": "Vocabulary Test",
   "cordovaId": "de.floriankraft.vocabulary-test",
