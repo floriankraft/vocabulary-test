@@ -13,7 +13,14 @@ at the beginning of the session.
 
 ## Production build
 
-`npm run build`
+Every build command will clear the dist folder before creating resources anew.
+
+If you did not build the application before, then you have to invoke `npm install` first.
+
+* `npm run build` (build for all platforms - :exclamation: this is not working right now)
+* `npm run build-linux`(build for linux)
+* `npm run build-mac` (build for mac)
+* `npm run build-win` (build for windows)
 
 ## Development build & Run
 
@@ -22,6 +29,6 @@ at the beginning of the session.
 
 ## Path of vocabulary file per OS
 
-* Linux: `~/.config/Electron/Vocabulary Test/vocabulary.txt`
+* Linux: `~/.config/Vocabulary Test/vocabulary.txt`
 * Mac: (?)
 * Windows: (?)

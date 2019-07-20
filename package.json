@@ -1,14 +1,17 @@
 {
   "name": "vocabulary-test",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Practice spelling of words with a list of self-defined vocabulary.",
   "productName": "Vocabulary Test",
   "cordovaId": "de.floriankraft.vocabulary-test",
   "author": "Florian Kraft <mail@floriankraft.com>",
   "private": true,
   "scripts": {
-    "start": "quasar dev -m electron",
-    "build": "quasar build -m electron",
+    "start": "quasar dev --mode electron",
+    "build": "quasar build --mode electron --target all",
+    "build-linux": "quasar build --mode electron --target linux",
+    "build-mac": "quasar build --mode electron --target darwin",
+    "build-win": "quasar build --mode electron --target win32",
     "lint": "eslint --ext .js,.vue src",
     "test": "echo \"No test specified\" && exit 0"
   },
@@ -23,6 +26,7 @@
     "babel-eslint": "^10.0.1",
     "devtron": "^1.4.0",
     "electron": "^5.0.6",
+    "electron-builder": "21.0.2",
     "electron-debug": "^3.0.1",
     "electron-devtools-installer": "^2.2.4",
     "electron-packager": "^13.1.1",

@@ -143,26 +143,25 @@ module.exports = function (ctx) {
     },
 
     electron: {
-      // bundler: 'builder', // or 'packager'
+      bundler: 'builder',
 
-      extendWebpack (cfg) {
-        // do something with Electron main process Webpack cfg
-        // chainWebpack also available besides this extendWebpack
-      },
+      builder: {
+        productName: "vocabulary-test",
 
-      packager: {
-        all: true
-
-        // https://github.com/electron-userland/electron-packager/blob/master/docs/api.md#options
-
-        // OS X / Mac App Store
-        // appBundleId: '',
-        // appCategoryType: '',
-        // osxSign: '',
-        // protocol: 'myapp://path',
-
-        // Windows only
-        // win32metadata: { ... }
+        linux: {
+          artifactName: "${productName}-${version}-linux.${ext}",
+          category: "Education",
+          target: "AppImage"
+        },
+        mac: {
+          artifactName: "${productName}-${version}-mac.${ext}",
+          category: "public.app-category.education",
+          target: "zip"
+        },
+        win: {
+          artifactName: "${productName}-${version}-win32.${ext}",
+          target: "portable"
+        }
       }
     }
   }
