@@ -16,7 +16,7 @@ at the beginning of the session.
 ## Path of vocabulary file per OS
 
 * Linux: `~/.config/Vocabulary Test/vocabulary.txt`
-* Mac: :question:
+* Mac: `/Users/{USER_NAME}/Library/Application\ Support/Vocabulary\ Test/`
 * Windows: :question:
 
 ## Development Dependencies
