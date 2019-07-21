@@ -8,11 +8,14 @@ import { app } from 'electron';
 import path from 'path';
 import electronDebug from 'electron-debug';
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer';
-import { productName } from '../../package.json';
+import { productName, version } from '../../package.json';
 
 // Set user data path explicitly in DEV mode. Otherwise it would always be 'Electron'.
 const originalUserData = app.getPath('userData');
 app.setPath('userData', path.join(originalUserData, productName));
+
+// Set app version explicitly in DEV mode. Otherwise the app version of Electron would be shown.
+app.setVersion(version);
 
 // Show dev-tools
 electronDebug({ showDevTools: true, devToolsMode: 'undocked' });
