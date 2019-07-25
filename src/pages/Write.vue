@@ -5,6 +5,7 @@
       class="task__input"
       outlined
       rounded
+      v-model="currentInput"
       v-on:input="inputChange"
       v-on:keyup.enter="inputSubmit"
     />
@@ -18,12 +19,16 @@ import taskProgressBar from '../components/taskProgressBar';
 export default {
   data() {
     return {
+      currentInput: '',
       vocabularyCurrentIndex: 0
     };
   },
   methods: {
-    inputChange(value) {
-      this.$store.commit('vocabulary/setInputListItem', { index: this.vocabularyCurrentIndex, word: value });
+    inputChange() {
+      this.$store.commit('vocabulary/setInputListItem', {
+        index: this.vocabularyCurrentIndex,
+        word: this.currentInput
+      });
     },
     inputSubmit() {
       this.$router.push('/evaluate');
