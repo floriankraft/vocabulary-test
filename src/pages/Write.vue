@@ -6,7 +6,6 @@
       outlined
       rounded
       v-model="currentInput"
-      v-on:input="inputChange"
       v-on:keyup.enter="inputSubmit"
     />
     <task-progress-bar :totalSeconds="30" />
@@ -24,12 +23,6 @@ export default {
     };
   },
   methods: {
-    inputChange() {
-      this.$store.commit('vocabulary/setInputListItem', {
-        index: this.vocabularyCurrentIndex,
-        word: this.currentInput
-      });
-    },
     inputSubmit() {
       this.$router.push('/evaluate');
     }
@@ -43,6 +36,10 @@ export default {
   },
   beforeDestroy() {
     this.$root.$off('task-progress-bar:finish');
+    this.$store.commit('vocabulary/setInputListItem', {
+      index: this.vocabularyCurrentIndex,
+      word: this.currentInput
+    });
   },
   components: {
     taskProgressBar
