@@ -30,5 +30,5 @@ If you did not build the application before, then you have to invoke `npm instal
 ## Path of vocabulary file per OS
 
 * Linux: `~/.config/Vocabulary Test/vocabulary.txt`
-* Mac: (?)
-* Windows: (?)
+* Mac: :question:
+* Windows: :question:
