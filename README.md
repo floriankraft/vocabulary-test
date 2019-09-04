@@ -32,7 +32,7 @@ Every build command will clear the dist folder before creating resources anew.
 
 If you did not build the application before, then you have to invoke `npm install` first.
 
-* `npm run build` (build for all platforms - :exclamation: this is not working [right now](https://github.com/floriankraft/vocabulary-test/issues/3))
+* `npm run build` (build for all platforms)
 * `npm run build-linux`(build for linux)
 * `npm run build-mac` (build for mac)
 * `npm run build-win` (build for windows)
