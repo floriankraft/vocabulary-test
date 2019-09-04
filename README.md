@@ -1,5 +1,7 @@
 # Readme
 
+## Description
+
 This is a simple application for practicing the spelling of vocabulary. The user interface is in german language, but
 as most elements are iconographic, this should be not an issue for speakers of other languages.
 
@@ -10,6 +12,19 @@ is yet empty, you will be notified on startup. A button is provided as a shortcu
 
 To change the vocabulary for training, the application has to be closed and reopened, as the words are stored in memory
 at the beginning of the session.
+
+## Path of vocabulary file per OS
+
+* Linux: `~/.config/Vocabulary Test/vocabulary.txt`
+* Mac: :question:
+* Windows: :question:
+
+## Development Dependencies
+
+Only applies, when developing on Linux.
+
+* [Wine](https://wiki.winehq.org/Download#binary)
+* [Mono](https://wiki.winehq.org/Mono)
 
 ## Production build
 
@@ -26,9 +41,3 @@ If you did not build the application before, then you have to invoke `npm instal
 
 * `npm install`
 * `npm start`
-
-## Path of vocabulary file per OS
-
-* Linux: `~/.config/Vocabulary Test/vocabulary.txt`
-* Mac: :question:
-* Windows: :question:
