@@ -1,6 +1,12 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
+import util from 'util';
 import fs from 'fs';
 import path from 'path';
+
+// Promisify some needed functions
+const exists = util.promisify(fs.exists);
+const readFile = util.promisify(fs.readFile);
+const writeFile = util.promisify(fs.writeFile);
 
 const userDataPath = app.getPath('userData');
 const vocabularyFilePath = path.join(userDataPath, '/vocabulary.txt');
@@ -17,9 +23,7 @@ if (process.env.PROD) {
 let mainWindow;
 
 const createWindow = async () => {
-  /**
-   * Initial window options
-   */
+
   const win = new BrowserWindow({
     frame: false,
     height: 600,
@@ -67,67 +71,68 @@ app.on('activate', () => {
   }
 });
 
-const sendVocabularyToPage = (err, data) => {
-  const vocabularyArray = data.split(/\r?\n/);
-  const filteredArray = vocabularyArray.filter(el => el !== null && el !== '');
-  const payload = {
-    filePath: vocabularyFilePath,
-    vocabulary: filteredArray
+// Read/Write file operations
+
+const writeStatisticsFile = async (statisticsFileContent, newStatisticsItem) => {
+  statisticsFileContent.runs.unshift(newStatisticsItem);
+  await writeFile(statisticsFilePath, JSON.stringify(statisticsFileContent), 'utf8');
+  return statisticsFileContent;
+};
+
+const readStatisticsFile = async () => {
+  let statisticsFileContent = {
+    runs: []
   };
-  mainWindow.webContents.send('vocabularyFileLoaded', payload);
+  const isStatisticsFileExisting = await exists(statisticsFilePath);
+  if (isStatisticsFileExisting) {
+    const fileData = await readFile(statisticsFilePath, 'utf8');
+    statisticsFileContent = JSON.parse(fileData);
+  } else {
+    await writeFile(statisticsFilePath, JSON.stringify(statisticsFileContent), 'utf8');
+  }
+  return statisticsFileContent;
 };
 
-const readVocabularyFile = (callback) => {
-  fs.exists(vocabularyFilePath, (exists) => {
-    if (exists) {
-      fs.readFile(vocabularyFilePath, 'utf8', callback);
-    } else {
-      fs.writeFile(vocabularyFilePath, '', 'utf8', () => {
-        callback(null, '');
-      });
-    }
-  });
+const readVocabularyFile = async () => {
+  const vocabularyFileContent = {
+    filePath: vocabularyFilePath,
+    vocabulary: []
+  };
+  const isVocabularyFileExisting = await exists(vocabularyFilePath);
+  if (isVocabularyFileExisting) {
+    const fileData = await readFile(vocabularyFilePath, 'utf8');
+    const vocabularyArray = fileData.split(/\r?\n/);
+    const filteredArray = vocabularyArray.filter(el => el !== null && el !== '');
+    vocabularyFileContent.vocabulary = filteredArray;
+  } else {
+    await writeFile(vocabularyFilePath, '', 'utf8');
+  }
+  return vocabularyFileContent;
 };
 
-const sendStatisticsToPage = (data) => {
-  mainWindow.webContents.send('statisticsFileLoaded', data);
+const readAllFiles = async () => {
+  const allFilesContent = {};
+  allFilesContent.vocabularyFileContent = await readVocabularyFile();
+  allFilesContent.statisticsFileContent = await readStatisticsFile();
+  return allFilesContent;
 };
 
-const writeStatisticsFile = (statistics, newStatisticsItem, callback) => {
-  statistics.runs.unshift(newStatisticsItem);
-  fs.writeFile(statisticsFilePath, JSON.stringify(statistics), 'utf8', () => {
-    callback();
-  });
-};
+// Event listeners
 
-const readStatisticsFile = (callback) => {
-  fs.exists(statisticsFilePath, (exists) => {
-    if (exists) {
-      fs.readFile(statisticsFilePath, 'utf8', (err, statisticsFileContent) => {
-        if (!err) {
-          callback(JSON.parse(statisticsFileContent));
-        }
-      });
-    } else {
-      const emptyStatistics = {
-        runs: []
-      };
-      callback(emptyStatistics);
-    }
-  });
-};
-
-ipcMain.on('statisticsPrepared', (event, newStatisticsItem) => {
-  readStatisticsFile((statistics) => {
-    writeStatisticsFile(statistics, newStatisticsItem, () => {
-      event.reply('statisticsSaved', statistics);
-    });
-  });
+ipcMain.on('frontendHasNewStatisticsItem', async (event, newStatisticsItem) => {
+  const statisticsFileContent = await readStatisticsFile();
+  const newStatisticsFileContent = await writeStatisticsFile(statisticsFileContent, newStatisticsItem);
+  event.reply('backendHasSavedStatistics', newStatisticsFileContent);
 });
+
+ipcMain.on('frontendIsReadyForData', async (event) => {
+  const allFilesContent = await readAllFiles();
+  event.reply('backendHasLoadedData', allFilesContent);
+});
+
+// Starting point
 
 (async () => {
   await app.whenReady();
   mainWindow = await createWindow();
-  readVocabularyFile(sendVocabularyToPage);
-  readStatisticsFile(sendStatisticsToPage);
 })();

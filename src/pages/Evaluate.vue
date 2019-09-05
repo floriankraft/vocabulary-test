@@ -62,13 +62,13 @@ export default {
     },
     saveStatistics(callback) {
       // Listen for response from main process - statistics file has been written
-      this.$q.electron.ipcRenderer.on('statisticsSaved', (event, fullStatistics) => {
+      this.$q.electron.ipcRenderer.on('backendHasSavedStatistics', (event, fullStatistics) => {
         this.$store.commit('vocabulary/setStatistics', fullStatistics);
         callback();
       });
 
       // Send message to main process containing the statistics of the current run
-      this.$q.electron.ipcRenderer.send('statisticsPrepared', {
+      this.$q.electron.ipcRenderer.send('frontendHasNewStatisticsItem', {
         timestamp: Date.now(),
         taskList: this.$store.state.vocabulary.taskList,
         inputList: this.$store.state.vocabulary.inputList,
