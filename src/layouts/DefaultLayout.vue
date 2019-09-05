@@ -14,6 +14,9 @@
 
     <q-page-container>
       <router-view />
+      <q-badge class="defaultlayout__versionfield fixed-bottom-right" color="primary" transparent>
+        v{{appVersion}}
+      </q-badge>
     </q-page-container>
   </q-layout>
 </template>
@@ -21,6 +24,14 @@
 <script>
 export default {
   name: 'DefaultLayout',
+  data() {
+    return {
+      appVersion: ''
+    };
+  },
+  beforeMount() {
+    this.appVersion = this.$q.electron.remote.app.getVersion();
+  },
   methods: {
     minimize() {
       if (process.env.MODE === 'electron') {
@@ -48,4 +59,7 @@ export default {
 </script>
 
 <style>
+.defaultlayout__versionfield {
+  margin: 16px;
+}
 </style>

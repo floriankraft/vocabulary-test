@@ -18,7 +18,6 @@
       color="primary"
       label="Los gehts!"
     />
-    <q-badge class="index__versionfield fixed-bottom-right" color="primary" transparent>v{{appVersion}}</q-badge>
   </q-page>
 </template>
 
@@ -28,8 +27,7 @@ export default {
   data() {
     return {
       isVocabularyFileLoaded: false,
-      vocabularyFilePath: '',
-      appVersion: ''
+      vocabularyFilePath: ''
     };
   },
   beforeMount() {
@@ -42,8 +40,6 @@ export default {
       }
       this.$store.commit('vocabulary/setStatistics', allFilesContent.statisticsFileContent.statistics);
     });
-
-    this.appVersion = this.$q.electron.remote.app.getVersion();
   },
   mounted() {
     this.$q.electron.ipcRenderer.send('frontendIsReadyForData');
@@ -63,9 +59,5 @@ export default {
 
 .index__vocabulary-missing__button {
   margin: 16px 0 0;
-}
-
-.index__versionfield {
-  margin: 16px;
 }
 </style>
