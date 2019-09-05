@@ -33,16 +33,14 @@ export default {
     };
   },
   beforeMount() {
-    this.$q.electron.ipcRenderer.on('backendHasLoadedVocabularyFile', (event, vocabularyFilePayload) => {
-      this.vocabularyFilePath = vocabularyFilePayload.filePath;
-      const vocabularyArray = vocabularyFilePayload.vocabulary;
+    this.$q.electron.ipcRenderer.on('backendHasLoadedData', (event, allFilesContent) => {
+      this.vocabularyFilePath = allFilesContent.vocabularyFileContent.filePath;
+      const vocabularyArray = allFilesContent.vocabularyFileContent.vocabulary;
       if (vocabularyArray.length > 0) {
         this.$store.commit('vocabulary/setTaskList', vocabularyArray);
         this.isVocabularyFileLoaded = true;
       }
-    });
-    this.$q.electron.ipcRenderer.on('backendHasLoadedStatisticsFile', (event, statistics) => {
-      this.$store.commit('vocabulary/setStatistics', statistics);
+      this.$store.commit('vocabulary/setStatistics', allFilesContent.statisticsFileContent.statistics);
     });
 
     this.appVersion = this.$q.electron.remote.app.getVersion();

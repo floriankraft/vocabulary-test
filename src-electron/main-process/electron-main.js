@@ -73,10 +73,6 @@ app.on('activate', () => {
   }
 });
 
-const sendStatisticsToPage = (event, statisticsFileContent) => {
-  event.reply('backendHasLoadedStatisticsFile', statisticsFileContent);
-};
-
 const writeStatisticsFile = (statistics, newStatisticsItem, callback) => {
   statistics.runs.unshift(newStatisticsItem);
   fs.writeFile(statisticsFilePath, JSON.stringify(statistics), 'utf8', () => {
@@ -90,8 +86,8 @@ const readStatisticsFile = async () => {
   };
   const isStatisticsFileExisting = await exists(statisticsFilePath);
   if (isStatisticsFileExisting) {
-    const data = await readFile(statisticsFilePath, 'utf8');
-    statisticsFileContent = JSON.parse(data);
+    const fileData = await readFile(statisticsFilePath, 'utf8');
+    statisticsFileContent = JSON.parse(fileData);
   } else {
     await writeFile(statisticsFilePath, JSON.stringify(statisticsFileContent), 'utf8');
   }
@@ -106,32 +102,33 @@ ipcMain.on('statisticsPrepared', (event, newStatisticsItem) => {
   });
 });
 
-const sendVocabularyToPage = (event, vocabularyFileContent) => {
-  const vocabularyArray = vocabularyFileContent.split(/\r?\n/);
-  const filteredArray = vocabularyArray.filter(el => el !== null && el !== '');
-  const payload = {
-    filePath: vocabularyFilePath,
-    vocabulary: filteredArray
-  };
-  event.reply('backendHasLoadedVocabularyFile', payload);
-};
-
 const readVocabularyFile = async () => {
-  let vocabularyFileContent = '';
+  const vocabularyFileContent = {
+    filePath: vocabularyFilePath,
+    vocabulary: []
+  };
   const isVocabularyFileExisting = await exists(vocabularyFilePath);
   if (isVocabularyFileExisting) {
-    vocabularyFileContent = await readFile(vocabularyFilePath, 'utf8');
+    const fileData = await readFile(vocabularyFilePath, 'utf8');
+    const vocabularyArray = fileData.split(/\r?\n/);
+    const filteredArray = vocabularyArray.filter(el => el !== null && el !== '');
+    vocabularyFileContent.vocabulary = filteredArray;
   } else {
     await writeFile(vocabularyFilePath, '', 'utf8');
   }
   return vocabularyFileContent;
 };
 
+const readAllFiles = async () => {
+  const allFilesContent = {};
+  allFilesContent.vocabularyFileContent = await readVocabularyFile();
+  allFilesContent.statisticsFileContent = await readStatisticsFile();
+  return allFilesContent;
+};
+
 ipcMain.on('frontendIsReadyForData', async (event) => {
-  const vocabularyFileContent = await readVocabularyFile();
-  const statisticsFileContent = await readStatisticsFile();
-  sendVocabularyToPage(event, vocabularyFileContent);
-  sendStatisticsToPage(event, statisticsFileContent);
+  const allFilesContent = await readAllFiles();
+  event.reply('backendHasLoadedData', allFilesContent);
 });
 
 (async () => {
