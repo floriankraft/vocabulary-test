@@ -23,9 +23,7 @@ if (process.env.PROD) {
 let mainWindow;
 
 const createWindow = async () => {
-  /**
-   * Initial window options
-   */
+
   const win = new BrowserWindow({
     frame: false,
     height: 600,
@@ -73,11 +71,12 @@ app.on('activate', () => {
   }
 });
 
-const writeStatisticsFile = (statistics, newStatisticsItem, callback) => {
-  statistics.runs.unshift(newStatisticsItem);
-  fs.writeFile(statisticsFilePath, JSON.stringify(statistics), 'utf8', () => {
-    callback();
-  });
+// Read/Write file operations
+
+const writeStatisticsFile = async (statisticsFileContent, newStatisticsItem) => {
+  statisticsFileContent.runs.unshift(newStatisticsItem);
+  await writeFile(statisticsFilePath, JSON.stringify(statisticsFileContent), 'utf8');
+  return statisticsFileContent;
 };
 
 const readStatisticsFile = async () => {
@@ -93,14 +92,6 @@ const readStatisticsFile = async () => {
   }
   return statisticsFileContent;
 };
-
-ipcMain.on('statisticsPrepared', (event, newStatisticsItem) => {
-  readStatisticsFile((statistics) => {
-    writeStatisticsFile(statistics, newStatisticsItem, () => {
-      event.reply('statisticsSaved', statistics);
-    });
-  });
-});
 
 const readVocabularyFile = async () => {
   const vocabularyFileContent = {
@@ -126,10 +117,20 @@ const readAllFiles = async () => {
   return allFilesContent;
 };
 
+// Event listeners
+
+ipcMain.on('frontendHasNewStatisticsItem', async (event, newStatisticsItem) => {
+  const statisticsFileContent = await readStatisticsFile();
+  const newStatisticsFileContent = await writeStatisticsFile(statisticsFileContent, newStatisticsItem);
+  event.reply('backendHasSavedStatistics', newStatisticsFileContent);
+});
+
 ipcMain.on('frontendIsReadyForData', async (event) => {
   const allFilesContent = await readAllFiles();
   event.reply('backendHasLoadedData', allFilesContent);
 });
+
+// Starting point
 
 (async () => {
   await app.whenReady();
