@@ -73,27 +73,6 @@ app.on('activate', () => {
   }
 });
 
-const sendVocabularyToPage = (event, vocabularyFileContent) => {
-  const vocabularyArray = vocabularyFileContent.split(/\r?\n/);
-  const filteredArray = vocabularyArray.filter(el => el !== null && el !== '');
-  const payload = {
-    filePath: vocabularyFilePath,
-    vocabulary: filteredArray
-  };
-  event.reply('backendHasLoadedVocabularyFile', payload);
-};
-
-const readVocabularyFile = async () => {
-  let vocabularyFileContent = '';
-  const isVocabularyFileExisting = await exists(vocabularyFilePath);
-  if (isVocabularyFileExisting) {
-    vocabularyFileContent = await readFile(vocabularyFilePath, 'utf8');
-  } else {
-    await writeFile(vocabularyFilePath, '', 'utf8');
-  }
-  return vocabularyFileContent;
-};
-
 const sendStatisticsToPage = (event, statisticsFileContent) => {
   event.reply('backendHasLoadedStatisticsFile', statisticsFileContent);
 };
@@ -126,6 +105,27 @@ ipcMain.on('statisticsPrepared', (event, newStatisticsItem) => {
     });
   });
 });
+
+const sendVocabularyToPage = (event, vocabularyFileContent) => {
+  const vocabularyArray = vocabularyFileContent.split(/\r?\n/);
+  const filteredArray = vocabularyArray.filter(el => el !== null && el !== '');
+  const payload = {
+    filePath: vocabularyFilePath,
+    vocabulary: filteredArray
+  };
+  event.reply('backendHasLoadedVocabularyFile', payload);
+};
+
+const readVocabularyFile = async () => {
+  let vocabularyFileContent = '';
+  const isVocabularyFileExisting = await exists(vocabularyFilePath);
+  if (isVocabularyFileExisting) {
+    vocabularyFileContent = await readFile(vocabularyFilePath, 'utf8');
+  } else {
+    await writeFile(vocabularyFilePath, '', 'utf8');
+  }
+  return vocabularyFileContent;
+};
 
 ipcMain.on('frontendIsReadyForData', async (event) => {
   const vocabularyFileContent = await readVocabularyFile();
