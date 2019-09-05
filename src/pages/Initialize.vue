@@ -11,7 +11,7 @@
         label="Datei öffnen"
       />
       <q-btn
-        @click="$router.push('/')"
+        to="/"
         class="init__button"
         color="primary"
         icon="refresh"
