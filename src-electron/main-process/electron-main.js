@@ -1,6 +1,12 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
+import util from 'util';
 import fs from 'fs';
 import path from 'path';
+
+// Promisify some needed functions
+const exists = util.promisify(fs.exists);
+const readFile = util.promisify(fs.readFile);
+const writeFile = util.promisify(fs.writeFile);
 
 const userDataPath = app.getPath('userData');
 const vocabularyFilePath = path.join(userDataPath, '/vocabulary.txt');
@@ -67,7 +73,7 @@ app.on('activate', () => {
   }
 });
 
-const sendVocabularyToPage = (err, data) => {
+const sendVocabularyToPage = (data) => {
   const vocabularyArray = data.split(/\r?\n/);
   const filteredArray = vocabularyArray.filter(el => el !== null && el !== '');
   const payload = {
@@ -77,16 +83,15 @@ const sendVocabularyToPage = (err, data) => {
   mainWindow.webContents.send('vocabularyFileLoaded', payload);
 };
 
-const readVocabularyFile = (callback) => {
-  fs.exists(vocabularyFilePath, (exists) => {
-    if (exists) {
-      fs.readFile(vocabularyFilePath, 'utf8', callback);
-    } else {
-      fs.writeFile(vocabularyFilePath, '', 'utf8', () => {
-        callback(null, '');
-      });
-    }
-  });
+const readVocabularyFile = async () => {
+  let vocabularyFileContent = '';
+  const isVocabularyFileExisting = await exists(vocabularyFilePath);
+  if (isVocabularyFileExisting) {
+    vocabularyFileContent = await readFile(vocabularyFilePath, 'utf8');
+  } else {
+    await writeFile(vocabularyFilePath, '', 'utf8');
+  }
+  return vocabularyFileContent;
 };
 
 const sendStatisticsToPage = (data) => {
@@ -100,21 +105,18 @@ const writeStatisticsFile = (statistics, newStatisticsItem, callback) => {
   });
 };
 
-const readStatisticsFile = (callback) => {
-  fs.exists(statisticsFilePath, (exists) => {
-    if (exists) {
-      fs.readFile(statisticsFilePath, 'utf8', (err, statisticsFileContent) => {
-        if (!err) {
-          callback(JSON.parse(statisticsFileContent));
-        }
-      });
-    } else {
-      const emptyStatistics = {
-        runs: []
-      };
-      callback(emptyStatistics);
-    }
-  });
+const readStatisticsFile = async () => {
+  let statisticsFileContent = {
+    runs: []
+  };
+  const isStatisticsFileExisting = await exists(statisticsFilePath);
+  if (isStatisticsFileExisting) {
+    const data = await readFile(statisticsFilePath, 'utf8');
+    statisticsFileContent = JSON.parse(data);
+  } else {
+    await writeFile(statisticsFilePath, JSON.stringify(statisticsFileContent), 'utf8');
+  }
+  return statisticsFileContent;
 };
 
 ipcMain.on('statisticsPrepared', (event, newStatisticsItem) => {
@@ -128,6 +130,8 @@ ipcMain.on('statisticsPrepared', (event, newStatisticsItem) => {
 (async () => {
   await app.whenReady();
   mainWindow = await createWindow();
-  readVocabularyFile(sendVocabularyToPage);
-  readStatisticsFile(sendStatisticsToPage);
+  const vocabulary = await readVocabularyFile();
+  const statistics = await readStatisticsFile();
+  sendVocabularyToPage(vocabulary);
+  sendStatisticsToPage(statistics);
 })();
