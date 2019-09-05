@@ -11,6 +11,9 @@
 export default {
   beforeMount() {
     this.$q.electron.ipcRenderer.on('backendHasLoadedData', (event, allFilesContent) => {
+      const passwordHash = null; // TODO: Get salted password hash from backend
+      // TODO: Store salted password hash in vuex
+
       const vocabularyFilePath = allFilesContent.vocabularyFileContent.filePath;
       this.$store.commit('vocabulary/setFilePath', vocabularyFilePath);
 
@@ -20,7 +23,9 @@ export default {
       const statisticsData = allFilesContent.statisticsFileContent.statistics;
       this.$store.commit('vocabulary/setStatistics', statisticsData);
 
-      if (vocabularyArray.length > 0) {
+      if (passwordHash === null) {
+        this.$router.push('/welcome');
+      } else if (vocabularyArray.length > 0) {
         this.$router.push('/start');
       } else {
         this.$router.push('/configure');
