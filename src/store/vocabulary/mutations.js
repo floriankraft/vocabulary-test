@@ -2,6 +2,10 @@
 export function someMutation (state) {
 }
 */
+export const setFilePath = (state, path) => {
+  state.filePath = path;
+};
+
 export const setTaskList = (state, words) => {
   state.taskList = words;
 };
