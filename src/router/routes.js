@@ -4,7 +4,7 @@ const routes = [
     component: () => import('layouts/DefaultLayout.vue'),
     children: [
       { path: '', component: () => import('pages/Index.vue') },
-      { path: 'initialize', component: () => import('pages/Initialize.vue') },
+      { path: 'configure', component: () => import('pages/Configure.vue') },
       { path: 'start', component: () => import('pages/Start.vue') },
       { path: 'wait', component: () => import('pages/Wait.vue') },
       { path: 'read', component: () => import('pages/Read.vue') },

@@ -23,7 +23,7 @@ export default {
       if (vocabularyArray.length > 0) {
         this.$router.push('/start');
       } else {
-        this.$router.push('/initialize');
+        this.$router.push('/configure');
       }
     });
   },
