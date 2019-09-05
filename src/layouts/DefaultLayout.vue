@@ -20,7 +20,7 @@
 
 <script>
 export default {
-  name: 'MyLayout',
+  name: 'DefaultLayout',
   methods: {
     minimize() {
       if (process.env.MODE === 'electron') {

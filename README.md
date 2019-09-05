@@ -17,7 +17,7 @@ at the beginning of the session.
 
 * Linux: `~/.config/Vocabulary Test/vocabulary.txt`
 * Mac: :question:
-* Windows: :question:
+* Windows: `%HOMEPATH%\AppData\Roaming\Vocabulary Test\vocabulary.txt`
 
 ## Development Dependencies
 
