@@ -33,7 +33,7 @@ export default {
     };
   },
   beforeMount() {
-    this.$q.electron.ipcRenderer.on('vocabularyFileLoaded', (event, vocabularyFilePayload) => {
+    this.$q.electron.ipcRenderer.on('backendHasLoadedVocabularyFile', (event, vocabularyFilePayload) => {
       this.vocabularyFilePath = vocabularyFilePayload.filePath;
       const vocabularyArray = vocabularyFilePayload.vocabulary;
       if (vocabularyArray.length > 0) {
@@ -41,11 +41,14 @@ export default {
         this.isVocabularyFileLoaded = true;
       }
     });
-    this.$q.electron.ipcRenderer.on('statisticsFileLoaded', (event, statistics) => {
+    this.$q.electron.ipcRenderer.on('backendHasLoadedStatisticsFile', (event, statistics) => {
       this.$store.commit('vocabulary/setStatistics', statistics);
     });
 
     this.appVersion = this.$q.electron.remote.app.getVersion();
+  },
+  mounted() {
+    this.$q.electron.ipcRenderer.send('frontendIsReadyForData');
   },
   methods: {
     openVocabularyFile() {
