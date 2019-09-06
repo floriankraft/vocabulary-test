@@ -9,9 +9,18 @@ const readFile = util.promisify(fs.readFile);
 const writeFile = util.promisify(fs.writeFile);
 
 const userDataPath = app.getPath('userData');
+
 const settingsFilePath = path.join(userDataPath, '/0f83ae01-0ec7-4983-95f1-6b0c15c0ecfe');
+const settingsFileDefaultContent = {
+  pw: ''
+};
+
 const vocabularyFilePath = path.join(userDataPath, '/vocabulary.txt');
+
 const statisticsFilePath = path.join(userDataPath, '/statistics.json');
+const statisticsFileDefaultContent = {
+  runs: []
+};
 
 /**
  * Set `__statics` path to static files in production;
@@ -79,18 +88,22 @@ const writeStatisticsFile = async (statisticsFileContent, newStatisticsItem) => 
   return statisticsFileContent;
 };
 
-const readStatisticsFile = async () => {
-  let statisticsFileContent = {
-    runs: []
-  };
-  const isStatisticsFileExisting = await exists(statisticsFilePath);
-  if (isStatisticsFileExisting) {
-    const fileData = await readFile(statisticsFilePath, 'utf8');
-    statisticsFileContent = JSON.parse(fileData);
+/**
+ * Reads a JSON file and returns a JSON object accordingly.
+ *
+ * @param {String} filePath Path to the JSON file, that should be read.
+ * @param {Object} defaultContent JSON object, that should be set initially, if the file is empty.
+ */
+const readJsonFile = async (filePath, defaultContent) => {
+  let jsonFileContent = defaultContent;
+  const isJsonFileExisting = await exists(filePath);
+  if (isJsonFileExisting) {
+    const fileData = await readFile(filePath, 'utf8');
+    jsonFileContent = JSON.parse(fileData);
   } else {
-    await writeFile(statisticsFilePath, JSON.stringify(statisticsFileContent), 'utf8');
+    await writeFile(filePath, JSON.stringify(jsonFileContent), 'utf8');
   }
-  return statisticsFileContent;
+  return jsonFileContent;
 };
 
 const readVocabularyFile = async () => {
@@ -110,31 +123,18 @@ const readVocabularyFile = async () => {
   return vocabularyFileContent;
 };
 
-const readSettingsFile = async () => {
-  let settingsFileContent = {
-    pw: ''
-  };
-  const isSettingsFileExisting = await exists(settingsFilePath);
-  if (isSettingsFileExisting) {
-    const fileData = await readFile(settingsFilePath, 'utf8');
-    settingsFileContent = JSON.parse(fileData);
-  } else {
-    await writeFile(settingsFilePath, JSON.stringify(settingsFileContent), 'utf8');
-  }
-};
-
 const readAllFiles = async () => {
   const allFilesContent = {};
-  allFilesContent.settingsFileContent = await readSettingsFile();
+  allFilesContent.settingsFileContent = await readJsonFile(settingsFilePath, settingsFileDefaultContent);
   allFilesContent.vocabularyFileContent = await readVocabularyFile();
-  allFilesContent.statisticsFileContent = await readStatisticsFile();
+  allFilesContent.statisticsFileContent = await readJsonFile(statisticsFilePath, statisticsFileDefaultContent);
   return allFilesContent;
 };
 
 // Event listeners
 
 ipcMain.on('frontendHasNewStatisticsItem', async (event, newStatisticsItem) => {
-  const statisticsFileContent = await readStatisticsFile();
+  const statisticsFileContent = await readJsonFile(statisticsFilePath, statisticsFileDefaultContent);
   const newStatisticsFileContent = await writeStatisticsFile(statisticsFileContent, newStatisticsItem);
   event.reply('backendHasSavedStatistics', newStatisticsFileContent);
 });
