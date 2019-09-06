@@ -161,6 +161,14 @@ ipcMain.on('frontendHasNewStatisticsItem', async (event, newStatisticsItem) => {
   event.reply('backendHasSavedStatistics', newStatisticsFileContent);
 });
 
+ipcMain.on('frontendIsTryingToLogin', async (event, sentData) => {
+  const settingsFileContent = await readJsonFile(settingsFilePath, settingsFileDefaultContent);
+  const storedHash = settingsFileContent.pw.hash;
+  const storedSalt = settingsFileContent.pw.salt;
+  const calculatedHash = crypto.pbkdf2Sync(sentData.password, storedSalt, 1000, 64, 'sha512').toString('hex');
+  event.reply('backendHasValidatedLogin', calculatedHash === storedHash);
+});
+
 ipcMain.on('frontendHasNewPassword', async (event, newPassword) => {
   await writePasswordToSettingsFile(newPassword);
   event.reply('backendHasSavedPassword');
