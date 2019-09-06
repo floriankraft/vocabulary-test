@@ -2,6 +2,7 @@ import { app, BrowserWindow, ipcMain } from 'electron';
 import util from 'util';
 import fs from 'fs';
 import path from 'path';
+import crypto from 'crypto';
 
 // Promisify some needed functions
 const exists = util.promisify(fs.exists);
@@ -10,9 +11,12 @@ const writeFile = util.promisify(fs.writeFile);
 
 const userDataPath = app.getPath('userData');
 
-const settingsFilePath = path.join(userDataPath, '/0f83ae01-0ec7-4983-95f1-6b0c15c0ecfe');
+const settingsFilePath = path.join(userDataPath, '/settings.json');
 const settingsFileDefaultContent = {
-  pw: ''
+  pw: {
+    hash: '',
+    salt: ''
+  }
 };
 
 const vocabularyFilePath = path.join(userDataPath, '/vocabulary.txt');
@@ -107,6 +111,18 @@ const writeStatisticsFile = async (newStatisticsItem) => {
   return statisticsFileContent;
 };
 
+const writePasswordToSettingsFile = async (data) => {
+  const settingsFileContent = await readJsonFile(settingsFilePath, settingsFileDefaultContent);
+
+  settingsFileContent.pw.salt = crypto.randomBytes(16).toString('hex');
+  settingsFileContent.pw.hash = crypto.pbkdf2Sync(
+    data.password, settingsFileContent.pw.salt, 1000, 64, 'sha512'
+  ).toString('hex');
+
+  await writeFile(settingsFilePath, JSON.stringify(settingsFileContent), 'utf8');
+  return settingsFileContent.pw;
+};
+
 const readVocabularyFile = async () => {
   const vocabularyFileContent = {
     filePath: vocabularyFilePath,
@@ -137,6 +153,11 @@ const readAllFiles = async () => {
 ipcMain.on('frontendHasNewStatisticsItem', async (event, newStatisticsItem) => {
   const newStatisticsFileContent = await writeStatisticsFile(newStatisticsItem);
   event.reply('backendHasSavedStatistics', newStatisticsFileContent);
+});
+
+ipcMain.on('frontendHasNewPassword', async (event, newPassword) => {
+  const saltedHashedPassword = await writePasswordToSettingsFile(newPassword);
+  event.reply('backendHasSavedPassword', saltedHashedPassword);
 });
 
 ipcMain.on('frontendIsReadyForData', async (event) => {

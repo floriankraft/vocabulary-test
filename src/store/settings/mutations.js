@@ -2,6 +2,10 @@
 export function someMutation (state) {
 }
 */
-export const setPassword = (state, pw) => {
-  state.password = pw;
+export const setPasswordHash = (state, passwordHash) => {
+  state.pw.hash = passwordHash;
+};
+
+export const setPasswordSalt = (state, passwordSalt) => {
+  state.pw.salt = passwordSalt;
 };

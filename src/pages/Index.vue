@@ -11,8 +11,10 @@
 export default {
   beforeMount() {
     this.$q.electron.ipcRenderer.on('backendHasLoadedData', (event, allFilesContent) => {
-      const passwordHash = allFilesContent.settingsFileContent.pw;
-      this.$store.commit('settings/setPassword', passwordHash);
+      const passwordHash = allFilesContent.settingsFileContent.pw.hash;
+      const passwordSalt = allFilesContent.settingsFileContent.pw.salt;
+      this.$store.commit('settings/setPasswordHash', passwordHash);
+      this.$store.commit('settings/setPasswordSalt', passwordSalt);
 
       const vocabularyFilePath = allFilesContent.vocabularyFileContent.filePath;
       this.$store.commit('vocabulary/setFilePath', vocabularyFilePath);
@@ -23,7 +25,7 @@ export default {
       const statisticsData = allFilesContent.statisticsFileContent;
       this.$store.commit('statistics/setData', statisticsData);
 
-      if (passwordHash === '') {
+      if (passwordHash === '' || passwordSalt === '') {
         this.$router.push('/welcome');
       } else if (vocabularyArray.length > 0) {
         this.$router.push('/start');
