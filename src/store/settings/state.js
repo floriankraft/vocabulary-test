@@ -1,6 +1,3 @@
 export default {
-  pw: {
-    hash: '',
-    salt: ''
-  }
+  isPasswordExisting: false
 };

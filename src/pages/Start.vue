@@ -6,7 +6,8 @@
       flat
       icon="build"
       round
-      to="/configure"/>
+      to="/login"
+    />
     <q-btn
       color="primary"
       :disable="isAppNotConfigured"

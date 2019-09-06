@@ -120,7 +120,12 @@ const writePasswordToSettingsFile = async (data) => {
   ).toString('hex');
 
   await writeFile(settingsFilePath, JSON.stringify(settingsFileContent), 'utf8');
-  return settingsFileContent.pw;
+};
+
+const prepareSettingsFileForFrontend = (settingsFileContent) => {
+  settingsFileContent.isPasswordExisting = settingsFileContent.pw.hash !== '' && settingsFileContent.pw.salt !== '';
+  delete settingsFileContent.pw;
+  return settingsFileContent;
 };
 
 const readVocabularyFile = async () => {
@@ -142,7 +147,8 @@ const readVocabularyFile = async () => {
 
 const readAllFiles = async () => {
   const allFilesContent = {};
-  allFilesContent.settingsFileContent = await readJsonFile(settingsFilePath, settingsFileDefaultContent);
+  const settingsFileContent = await readJsonFile(settingsFilePath, settingsFileDefaultContent);
+  allFilesContent.settingsFileContent = prepareSettingsFileForFrontend(settingsFileContent);
   allFilesContent.vocabularyFileContent = await readVocabularyFile();
   allFilesContent.statisticsFileContent = await readJsonFile(statisticsFilePath, statisticsFileDefaultContent);
   return allFilesContent;
@@ -156,8 +162,8 @@ ipcMain.on('frontendHasNewStatisticsItem', async (event, newStatisticsItem) => {
 });
 
 ipcMain.on('frontendHasNewPassword', async (event, newPassword) => {
-  const saltedHashedPassword = await writePasswordToSettingsFile(newPassword);
-  event.reply('backendHasSavedPassword', saltedHashedPassword);
+  await writePasswordToSettingsFile(newPassword);
+  event.reply('backendHasSavedPassword');
 });
 
 ipcMain.on('frontendIsReadyForData', async (event) => {

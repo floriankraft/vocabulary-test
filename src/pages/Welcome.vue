@@ -42,8 +42,7 @@ export default {
     };
   },
   beforeMount() {
-    this.$q.electron.ipcRenderer.on('backendHasSavedPassword', (event, saltedHashedPassword) => {
-      console.log(saltedHashedPassword);
+    this.$q.electron.ipcRenderer.on('backendHasSavedPassword', () => {
       this.$router.push('/');
     });
   },

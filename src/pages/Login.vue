@@ -15,6 +15,12 @@
         label="Passwort"
         stack-label
         type="password"
+        v-model="inputPassword"
+      />
+      <q-btn
+        @click="login"
+        color="primary"
+        label="Anmelden"
       />
     </div>
   </q-page>
@@ -22,6 +28,27 @@
 
 <script>
 export default {
+  data() {
+    return {
+      inputPassword: ''
+    };
+  },
+  beforeMount() {
+    this.$q.electron.ipcRenderer.on('backendHasValidatedLogin', (event, loginSuccessful) => {
+      if (loginSuccessful) {
+        this.$router.push('/configure');
+      } else {
+        // TODO: Show error message
+      }
+    });
+  },
+  methods: {
+    login() {
+      this.$q.electron.ipcRenderer.send('frontendIsTryingToLogin', {
+        password: this.inputPassword
+      });
+    }
+  }
 };
 </script>
 
