@@ -9,6 +9,7 @@ const readFile = util.promisify(fs.readFile);
 const writeFile = util.promisify(fs.writeFile);
 
 const userDataPath = app.getPath('userData');
+const settingsFilePath = path.join(userDataPath, '/0f83ae01-0ec7-4983-95f1-6b0c15c0ecfe');
 const vocabularyFilePath = path.join(userDataPath, '/vocabulary.txt');
 const statisticsFilePath = path.join(userDataPath, '/statistics.json');
 
@@ -23,7 +24,6 @@ if (process.env.PROD) {
 let mainWindow;
 
 const createWindow = async () => {
-
   const win = new BrowserWindow({
     frame: false,
     height: 600,
@@ -110,8 +110,22 @@ const readVocabularyFile = async () => {
   return vocabularyFileContent;
 };
 
+const readSettingsFile = async () => {
+  let settingsFileContent = {
+    pw: ''
+  };
+  const isSettingsFileExisting = await exists(settingsFilePath);
+  if (isSettingsFileExisting) {
+    const fileData = await readFile(settingsFilePath, 'utf8');
+    settingsFileContent = JSON.parse(fileData);
+  } else {
+    await writeFile(settingsFilePath, JSON.stringify(settingsFileContent), 'utf8');
+  }
+};
+
 const readAllFiles = async () => {
   const allFilesContent = {};
+  allFilesContent.settingsFileContent = await readSettingsFile();
   allFilesContent.vocabularyFileContent = await readVocabularyFile();
   allFilesContent.statisticsFileContent = await readStatisticsFile();
   return allFilesContent;
