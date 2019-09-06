@@ -100,7 +100,8 @@ const readJsonFile = async (filePath, defaultContent) => {
   return jsonFileContent;
 };
 
-const writeStatisticsFile = async (statisticsFileContent, newStatisticsItem) => {
+const writeStatisticsFile = async (newStatisticsItem) => {
+  const statisticsFileContent = await readJsonFile(statisticsFilePath, statisticsFileDefaultContent);
   statisticsFileContent.runs.unshift(newStatisticsItem);
   await writeFile(statisticsFilePath, JSON.stringify(statisticsFileContent), 'utf8');
   return statisticsFileContent;
@@ -134,8 +135,7 @@ const readAllFiles = async () => {
 // Event listeners
 
 ipcMain.on('frontendHasNewStatisticsItem', async (event, newStatisticsItem) => {
-  const statisticsFileContent = await readJsonFile(statisticsFilePath, statisticsFileDefaultContent);
-  const newStatisticsFileContent = await writeStatisticsFile(statisticsFileContent, newStatisticsItem);
+  const newStatisticsFileContent = await writeStatisticsFile(newStatisticsItem);
   event.reply('backendHasSavedStatistics', newStatisticsFileContent);
 });
 
