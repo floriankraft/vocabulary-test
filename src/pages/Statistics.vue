@@ -37,7 +37,7 @@ export default {
     };
   },
   mounted() {
-    this.statisticEntries = this.$store.state.vocabulary.statistics.runs;
+    this.statisticEntries = this.$store.state.statistics.data.runs;
   },
   methods: {
     formatTimestamp(timestamp) {

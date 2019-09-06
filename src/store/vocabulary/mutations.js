@@ -28,7 +28,3 @@ export const increaseCurrentIndex = (state) => {
 export const increaseCorrectWordCount = (state) => {
   state.correctWordCount++;
 };
-
-export const setStatistics = (state, statistics) => {
-  state.statistics = statistics;
-};

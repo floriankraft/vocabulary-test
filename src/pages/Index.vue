@@ -20,8 +20,8 @@ export default {
       const vocabularyArray = allFilesContent.vocabularyFileContent.vocabulary;
       this.$store.commit('vocabulary/setTaskList', vocabularyArray);
 
-      const statisticsData = allFilesContent.statisticsFileContent.statistics;
-      this.$store.commit('vocabulary/setStatistics', statisticsData);
+      const statisticsData = allFilesContent.statisticsFileContent;
+      this.$store.commit('statistics/setData', statisticsData);
 
       if (passwordHash === null) {
         this.$router.push('/welcome');
