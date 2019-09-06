@@ -4,6 +4,7 @@
       <h1 class="text-h3">Willkommen!</h1>
       <p>Es sieht so aus, als wären Sie das erste Mal hier. Bitte vergeben Sie ein Passwort, da Sie damit den Zugriff
         auf die Einstellungen in dieser Anwendung schützen.</p>
+      <p>Sie werden danach zu den Einstellungen weitergeleitet.</p>
       <q-input
         autofocus
         class="welcome__input"
@@ -23,12 +24,13 @@
         type="password"
         v-model="inputPasswordRepetition"
       />
+      <q-btn
+        class="welcome__submit"
+        @click="submitPassword"
+        color="primary"
+        label="Weiter"
+      />
     </div>
-    <q-btn
-      @click="submitPassword"
-      color="primary"
-      label="Weiter"
-    />
   </q-page>
 </template>
 
@@ -39,6 +41,12 @@ export default {
       inputPassword: '',
       inputPasswordRepetition: ''
     };
+  },
+  beforeMount() {
+    this.$q.electron.ipcRenderer.on('backendHasSavedPassword', (event, saltedHashedPassword) => {
+      console.log(saltedHashedPassword);
+      this.$router.push('/configure');
+    });
   },
   methods: {
     validatePasswordNotBlank(value) {
@@ -72,5 +80,9 @@ export default {
 
 .welcome__input {
   width: 300px;
+}
+
+.welcome__submit {
+  margin: 25px 0;
 }
 </style>
