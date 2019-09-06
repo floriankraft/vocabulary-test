@@ -4,7 +4,6 @@
       <h1 class="text-h3">Willkommen!</h1>
       <p>Es sieht so aus, als wären Sie das erste Mal hier. Bitte vergeben Sie ein Passwort, da Sie damit den Zugriff
         auf die Einstellungen in dieser Anwendung schützen.</p>
-      <p>Sie werden danach zu den Einstellungen weitergeleitet.</p>
       <q-input
         autofocus
         class="welcome__input"
@@ -45,7 +44,7 @@ export default {
   beforeMount() {
     this.$q.electron.ipcRenderer.on('backendHasSavedPassword', (event, saltedHashedPassword) => {
       console.log(saltedHashedPassword);
-      this.$router.push('/configure');
+      this.$router.push('/');
     });
   },
   methods: {

@@ -10,14 +10,14 @@
         color="primary"
         label="Datei öffnen"
       />
-      <q-btn
-        to="/"
-        class="init__button"
-        color="primary"
-        icon="refresh"
-        label="Neu laden"
-      />
     </div>
+    <q-btn
+      @click="logoutAndRedirect"
+      class="init__button"
+      color="primary"
+      icon="meeting_room"
+      label="Schließen"
+    />
   </q-page>
 </template>
 
@@ -34,6 +34,10 @@ export default {
   methods: {
     openVocabularyFile() {
       this.$q.electron.remote.shell.openItem(this.vocabularyFilePath);
+    },
+    logoutAndRedirect() {
+      // TODO: Logout user session
+      this.$router.push('/');
     }
   }
 };

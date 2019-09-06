@@ -27,10 +27,8 @@ export default {
 
       if (passwordHash === '' || passwordSalt === '') {
         this.$router.push('/welcome');
-      } else if (vocabularyArray.length > 0) {
-        this.$router.push('/start');
       } else {
-        this.$router.push('/configure');
+        this.$router.push('/start');
       }
     });
   },
