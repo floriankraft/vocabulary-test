@@ -82,12 +82,6 @@ app.on('activate', () => {
 
 // Read/Write file operations
 
-const writeStatisticsFile = async (statisticsFileContent, newStatisticsItem) => {
-  statisticsFileContent.runs.unshift(newStatisticsItem);
-  await writeFile(statisticsFilePath, JSON.stringify(statisticsFileContent), 'utf8');
-  return statisticsFileContent;
-};
-
 /**
  * Reads a JSON file and returns a JSON object accordingly.
  *
@@ -104,6 +98,12 @@ const readJsonFile = async (filePath, defaultContent) => {
     await writeFile(filePath, JSON.stringify(jsonFileContent), 'utf8');
   }
   return jsonFileContent;
+};
+
+const writeStatisticsFile = async (statisticsFileContent, newStatisticsItem) => {
+  statisticsFileContent.runs.unshift(newStatisticsItem);
+  await writeFile(statisticsFilePath, JSON.stringify(statisticsFileContent), 'utf8');
+  return statisticsFileContent;
 };
 
 const readVocabularyFile = async () => {
