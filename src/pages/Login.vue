@@ -12,14 +12,19 @@
       <p>Bitte geben Sie Ihr Passwort ein.</p>
       <q-input
         autofocus
+        error-message="Das Passwort ist nicht korrekt."
+        :error="!isLoginValid"
         label="Passwort"
+        ref="inputPassword"
         stack-label
         type="password"
         v-model="inputPassword"
       />
       <q-btn
         @click="login"
+        class="login__submit"
         color="primary"
+        :loading="isLoginInProgress"
         label="Anmelden"
       />
     </div>
@@ -30,7 +35,9 @@
 export default {
   data() {
     return {
-      inputPassword: ''
+      inputPassword: '',
+      isLoginInProgress: false,
+      isLoginValid: true
     };
   },
   beforeMount() {
@@ -38,12 +45,14 @@ export default {
       if (loginSuccessful) {
         this.$router.push('/configure');
       } else {
-        // TODO: Show error message
+        this.isLoginValid = false;
+        this.isLoginInProgress = false;
       }
     });
   },
   methods: {
     login() {
+      this.isLoginInProgress = true;
       this.$q.electron.ipcRenderer.send('frontendIsTryingToLogin', {
         password: this.inputPassword
       });
@@ -55,5 +64,9 @@ export default {
 <style>
 .login__backbutton {
   margin: 48px 16px;
+}
+
+.login__submit {
+  margin: 24px 0 0;
 }
 </style>
