@@ -1,5 +1,12 @@
 <template>
   <q-page class="flex flex-center">
+    <q-btn
+      class="statistics__backbutton fixed-top-left"
+      color="primary"
+      flat
+      icon="arrow_back"
+      round
+      to="/start"/>
     <q-scroll-area class="fullscreen statistics__scrollarea">
       <q-timeline class="statistics__timeline" color="primary" layout="comfortable">
         <q-timeline-entry
@@ -48,8 +55,12 @@ export default {
 </script>
 
 <style>
+.statistics__backbutton {
+  margin: 48px 16px;
+}
+
 .statistics__scrollarea {
-  margin: 50px 0 0;
+  margin: 32px 0 0 60px;
 }
 
 .statistics__timeline {
