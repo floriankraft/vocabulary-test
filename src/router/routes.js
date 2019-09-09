@@ -1,9 +1,11 @@
 const routes = [
   {
     path: '/',
-    component: () => import('layouts/MyLayout.vue'),
+    component: () => import('layouts/DefaultLayout.vue'),
     children: [
       { path: '', component: () => import('pages/Index.vue') },
+      { path: 'initialize', component: () => import('pages/Initialize.vue') },
+      { path: 'start', component: () => import('pages/Start.vue') },
       { path: 'wait', component: () => import('pages/Wait.vue') },
       { path: 'read', component: () => import('pages/Read.vue') },
       { path: 'memorize', component: () => import('pages/Memorize.vue') },

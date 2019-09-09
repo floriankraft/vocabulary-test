@@ -47,6 +47,7 @@ module.exports = function (ctx) {
         'QRating',
         'QScrollArea',
         'QSpace',
+        'QSpinner',
         'QSpinnerPie',
         'QTimeline',
         'QTimelineEntry'
