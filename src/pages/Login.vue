@@ -41,14 +41,7 @@ export default {
     };
   },
   beforeMount() {
-    this.$q.electron.ipcRenderer.on('backendHasValidatedLogin', (event, loginSuccessful) => {
-      if (loginSuccessful) {
-        this.$router.push('/configure');
-      } else {
-        this.isLoginValid = false;
-        this.isLoginInProgress = false;
-      }
-    });
+    this.$q.electron.ipcRenderer.on('backendHasValidatedLogin', this.onBackendHasValidatedLogin);
   },
   methods: {
     login() {
@@ -56,7 +49,18 @@ export default {
       this.$q.electron.ipcRenderer.send('frontendIsTryingToLogin', {
         password: this.inputPassword
       });
+    },
+    onBackendHasValidatedLogin(event, loginSuccessful) {
+      if (loginSuccessful) {
+        this.$router.push('/configure');
+      } else {
+        this.isLoginValid = false;
+        this.isLoginInProgress = false;
+      }
     }
+  },
+  beforeDestroy() {
+    this.$q.electron.ipcRenderer.removeListener('backendHasValidatedLogin', this.onBackendHasValidatedLogin);
   }
 };
 </script>

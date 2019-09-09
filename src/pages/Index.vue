@@ -10,7 +10,13 @@
 <script>
 export default {
   beforeMount() {
-    this.$q.electron.ipcRenderer.on('backendHasLoadedData', (event, allFilesContent) => {
+    this.$q.electron.ipcRenderer.on('backendHasLoadedData', this.onBackendHasLoadedData);
+  },
+  mounted() {
+    this.$q.electron.ipcRenderer.send('frontendIsReadyForData');
+  },
+  methods: {
+    onBackendHasLoadedData(event, allFilesContent) {
       const isPasswordExisting = allFilesContent.settingsFileContent.isPasswordExisting;
       this.$store.commit('settings/setIsPasswordExisting', isPasswordExisting);
 
@@ -28,10 +34,10 @@ export default {
       } else {
         this.$router.push('/start');
       }
-    });
+    }
   },
-  mounted() {
-    this.$q.electron.ipcRenderer.send('frontendIsReadyForData');
+  beforeDestroy() {
+    this.$q.electron.ipcRenderer.removeListener('backendHasLoadedData', this.onBackendHasLoadedData);
   }
 };
 </script>

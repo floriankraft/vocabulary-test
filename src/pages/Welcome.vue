@@ -42,9 +42,7 @@ export default {
     };
   },
   beforeMount() {
-    this.$q.electron.ipcRenderer.on('backendHasSavedPassword', () => {
-      this.$router.push('/');
-    });
+    this.$q.electron.ipcRenderer.on('backendHasSavedPassword', this.onBackendHasSavedPassword);
   },
   methods: {
     validatePasswordNotBlank(value) {
@@ -66,7 +64,13 @@ export default {
           password: this.inputPassword
         });
       }
+    },
+    onBackendHasSavedPassword() {
+      this.$router.push('/');
     }
+  },
+  beforeDestroy() {
+    this.$q.electron.ipcRenderer.removeListener('backendHasSavedPassword', this.onBackendHasSavedPassword);
   }
 };
 </script>

@@ -40,6 +40,10 @@ export default {
       return this.vocabularyCurrentTask === this.vocabularyCurrentInput;
     }
   },
+  beforeMount() {
+    // Listen for response from main process - statistics file has been written
+    this.$q.electron.ipcRenderer.on('backendHasSavedStatistics', this.onBackendHasSavedStatistics);
+  },
   mounted() {
     this.vocabularyCurrentTask = this.$store.state.vocabulary.taskList[this.$store.state.vocabulary.currentIndex];
     this.vocabularyCurrentInput = this.$store.state.vocabulary.inputList[this.$store.state.vocabulary.currentIndex];
@@ -50,23 +54,17 @@ export default {
     }
 
     if (this.isLastWord) {
-      this.saveStatistics(this.enableButton);
+      this.saveStatistics();
     } else {
-      this.increaseCurrentIndex(this.enableButton);
+      this.increaseCurrentIndex();
     }
   },
   methods: {
-    increaseCurrentIndex(callback) {
+    increaseCurrentIndex() {
       this.$store.commit('vocabulary/increaseCurrentIndex');
-      callback();
+      this.enableButton();
     },
-    saveStatistics(callback) {
-      // Listen for response from main process - statistics file has been written
-      this.$q.electron.ipcRenderer.on('backendHasSavedStatistics', (event, fullStatistics) => {
-        this.$store.commit('statistics/setData', fullStatistics);
-        callback();
-      });
-
+    saveStatistics() {
       // Send message to main process containing the statistics of the current run
       this.$q.electron.ipcRenderer.send('frontendHasNewStatisticsItem', {
         timestamp: Date.now(),
@@ -85,7 +83,14 @@ export default {
       } else {
         this.$router.push('/wait');
       }
+    },
+    onBackendHasSavedStatistics(event, fullStatistics) {
+      this.$store.commit('statistics/setData', fullStatistics);
+      this.enableButton();
     }
+  },
+  beforeDestroy() {
+    this.$q.electron.ipcRenderer.removeListener('backendHasSavedStatistics', this.onBackendHasSavedStatistics);
   }
 };
 </script>

@@ -36,7 +36,6 @@ export default {
       this.$q.electron.remote.shell.openItem(this.vocabularyFilePath);
     },
     logoutAndRedirect() {
-      // TODO: Logout user session
       this.$router.push('/');
     }
   }
