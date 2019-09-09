@@ -17,6 +17,10 @@ export default {
   },
   methods: {
     onBackendHasLoadedData(event, allFilesContent) {
+      this.$store.commit('settings/resetStore');
+      this.$store.commit('vocabulary/resetStore');
+      this.$store.commit('statistics/resetStore');
+
       const isPasswordExisting = allFilesContent.settingsFileContent.isPasswordExisting;
       this.$store.commit('settings/setIsPasswordExisting', isPasswordExisting);
 

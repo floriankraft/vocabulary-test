@@ -2,6 +2,16 @@
 export function someMutation (state) {
 }
 */
+import { defaults } from './state';
+
+export const resetStore = (state) => {
+  state.filePath = defaults.filePath;
+  state.taskList = defaults.taskList;
+  state.inputList = defaults.inputList;
+  state.currentIndex = defaults.currentIndex;
+  state.correctWordCount = defaults.correctWordCount;
+};
+
 export const setFilePath = (state, path) => {
   state.filePath = path;
 };
